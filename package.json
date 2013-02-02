@@ -12,6 +12,7 @@
     "connect": "*",
     "jshint": "*",
     "twit": "*",
-    "socket.io": "*"
+    "socket.io": "*",
+    "request": "*"
   }
 }
