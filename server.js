@@ -4,8 +4,7 @@
 "use strict";
 var express = require('express'),
   http = require('http'),
-  path = require('path'),
-  io = require('socket.io');
+  path = require('path');
   // mongoose = require('mongoose'),
 
 var app = express();
@@ -46,13 +45,14 @@ routes.common = require('./routes/common');
 app.get('/', routes.common.index);
 
 
-http.createServer(app).listen(app.get('port'), function() {
-  console.log("Express server listening on port " + app.get('port'));
-});
+http.createServer(app);
 
-io.listen(http);
+// http.listen(app.get('port'), function() {
+//   console.log("Express server listening on port " + app.get('port'));
+// });
 
-server.listen(3000);
+var io = require('socket.io').listen(app);
+app.listen(3000);
 
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/index.html');
