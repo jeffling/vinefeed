@@ -6,10 +6,11 @@ html(lang='en')
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js')
     link(rel='stylesheet', href='/css/bootstrap.min.css')
     script(src='/js/bootstrap.min.js')
+    script(src='/socket.io/socket.io.js')
+    script(src='/js/client.js')
+    
+    
   body
     .container
-        .span12
-            - if (typeof(messages) != 'undefined')
-                != flashMessages(messages)
         .span12
             block content
