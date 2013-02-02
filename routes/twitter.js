@@ -1,7 +1,6 @@
 "use strict";
 var Twit = require('twit')
-  , request = require('request')
-  , socketio = require('socket.io');
+  , request = require('request');
 
 var T = new Twit({
     consumer_key:         'gA11sspNJdtdCL2gWDQqFA', 
@@ -14,22 +13,21 @@ var T = new Twit({
 //  filter the twitter public stream by the word 'mango'. 
 //
 var stream = T.stream('statuses/filter', { track: 'vine co v' });
-exports.tweet_stream = function(req, res, next) {
+exports.tweet_stream = function(req, res) {
   stream.on('tweet', function (tweet) {
     var t = {};
     var text_splits = tweet.text.split(' ');
     var vine_url = text_splits[text_splits.length - 1];
-
     request(vine_url, function (error, response, body) {
       var pattern = /https\:\/\/vines\.s3\.amazonaws.com\/videos\/.*?\.mp4/;
       if (!error && response.statusCode == 200) {
         t.vid_url = pattern.exec(body)[0];
         t.user = tweet.user.screen_name;
+        socket.emit('tweet', {tweet: t});
         console.log(t);
       }
     });
   });
-  next();
 };
 
 //
