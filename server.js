@@ -4,11 +4,12 @@
 "use strict";
 var express = require('express'),
   http = require('http'),
-  path = require('path')
+  path = require('path'),
+  io = require('socket.io');
   // mongoose = require('mongoose'),
 
 var app = express();
-// app.locals = require('./locals');
+// app.locals = require(' ./locals');
 
 app.configure(function() {
   app.set('port', process.env.PORT || 3000);
@@ -47,4 +48,18 @@ app.get('/', routes.common.index);
 
 http.createServer(app).listen(app.get('port'), function() {
   console.log("Express server listening on port " + app.get('port'));
+});
+
+io.listen(http);
+
+server.listen(3000);
+
+app.get('/', function (req, res) {
+  res.sendfile(__dirname + '/index.html');
+});
+
+io.sockets.on('connection', function (socket) {
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
 });
