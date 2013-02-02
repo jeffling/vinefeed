@@ -12,7 +12,7 @@ var T = new Twit({
 //
 //  filter the twitter public stream by the word 'mango'. 
 //
-var stream = T.stream('statuses/filter', { track: 'vine co v' });
+exports.stream = T.stream('statuses/filter', { track: 'vine co v' });
 stream.on('tweet', function (tweet) {
   var t = {};
   var text_splits = tweet.text.split(' ');

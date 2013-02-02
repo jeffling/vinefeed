@@ -52,7 +52,4 @@ httpServer.listen(app.get('port'), function() {
 var io = socketio.listen(httpServer);
 
 io.sockets.on('connection', function (socket) {
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
 });
