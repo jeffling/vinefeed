@@ -69,8 +69,10 @@ io.sockets.on('connection', function (socket) {
     var vine_url = text_splits[text_splits.length - 1];
 
     request(vine_url, function (error, response, body) {
+      //sometimes pattern doesn't match
       var pattern = /https\:\/\/vines\.s3\.amazonaws.com\/videos\/.*?\.mp4/;
-      if (!error && response.statusCode == 200) {
+      var match = pattern.exec(body);
+      if (match != null && !error && response.statusCode == 200) {
         t.vid_url = pattern.exec(body)[0];
         t.user = tweet.user.screen_name;
         socket.volatile.emit('tweet', {tweet: t});
