@@ -61,19 +61,42 @@ var twit = new Twit({
 })
 
 io.sockets.on('connection', function (socket) {
-  twit.stream('statuses/filter', { track: 'vine co v' }).on('tweet', function (tweet) {
-    var t = {};
-    var text_splits = tweet.text.split(' ');
-    var vine_url = text_splits[text_splits.length - 1];
-    request(vine_url, function (error, response, body) {
-      var pattern = /https\:\/\/vines\.s3\.amazonaws.com\/videos\/.*?\.mp4/;
-      var match = pattern.exec(body);
-      if (match != null && !error && response.statusCode == 200) {
-        t.vid_url = pattern.exec(body)[0];
-        t.user = tweet.user.screen_name;
-        t.id = tweet.id;
-        socket.volatile.emit('tweet', {tweet: t});
-      }
+  socket.on('track', function(data) {
+    if (twit.stream.stop)
+      twit.stream.stop();
+    twit.stream('statuses/filter', { track: data.track }).on('tweet', function (tweet) {
+      var t = {};
+      var text_splits = tweet.text.split(' ');
+      var vine_url = text_splits[text_splits.length - 1];
+      request(vine_url, function (error, response, body) {
+        var pattern = /https\:\/\/vines\.s3\.amazonaws.com\/videos\/.*?\.mp4/;
+        var match = pattern.exec(body);
+        if (match != null && !error && response.statusCode == 200) {
+          t.vid_url = pattern.exec(body)[0];
+          t.user = tweet.user.screen_name;
+          t.id = tweet.id;
+          socket.volatile.emit('tweet', {tweet: t});
+        }
+      });
     });
-  });  
+  });
+  socket.on('location', function(data) {
+    if (twit.stream.stop)
+      twit.stream.stop();
+    twit.stream('statuses/filter', { locations: data.locations }).on('tweet', function (tweet) {
+      var t = {};
+      var text_splits = tweet.text.split(' ');
+      var vine_url = text_splits[text_splits.length - 1];
+      request(vine_url, function (error, response, body) {
+        var pattern = /https\:\/\/vines\.s3\.amazonaws.com\/videos\/.*?\.mp4/;
+        var match = pattern.exec(body);
+        if (match != null && !error && response.statusCode == 200) {
+          t.vid_url = pattern.exec(body)[0];
+          t.user = tweet.user.screen_name;
+          t.id = tweet.id;
+          socket.volatile.emit('tweet', {tweet: t});
+        }
+      });
+    });    
+  });
 });
