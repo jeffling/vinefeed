@@ -1,18 +1,22 @@
 var socket = io.connect('http://localhost');
 socket.on('tweet', function (data) {
-	$("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin' loop preload='auto' width=200 height=200 src='" + 
+	$("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin magnify' loop preload='auto' width='200' height='200' src='" + 
     data.tweet.vid_url + "''></video>").prependTo("#videos");
+    //{"width": "", "height" : ""}
 
   _V_(String(data.tweet.id)).ready(function() {
     this.volume(0);
-    this.play();
+    $("#" + String(data.tweet.id)).css("display", "inline-block");
   });
   
   // mouseover in mouseover out callbacks
   $("#" + data.tweet.id).hover(function(){
     _V_(String(data.tweet.id)).volume(1);
+    _V_(String(data.tweet.id)).play();
+
   }, function() {
     _V_(String(data.tweet.id)).volume(0);
+    _V_(String(data.tweet.id)).pause();
   });
 
 if ($("#videos").children().length > 8) {
