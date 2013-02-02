@@ -4,7 +4,9 @@
 "use strict";
 var express = require('express'),
   http = require('http'),
-  path = require('path');
+  path = require('path'),
+  socketio = require('socket.io');
+;
   // mongoose = require('mongoose'),
 
 var app = express();
@@ -37,26 +39,17 @@ app.configure('development', function() {
 //   app.use(express.errorHandler());
 // });
 
-
-
 // routes
 var routes = {};
 routes.common = require('./routes/common');
 app.get('/', routes.common.index);
 
-
-http.createServer(app);
-
-// http.listen(app.get('port'), function() {
-//   console.log("Express server listening on port " + app.get('port'));
-// });
-
-var io = require('socket.io').listen(app);
-app.listen(3000);
-
-app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/index.html');
+var httpServer = http.createServer(app);
+httpServer.listen(app.get('port'), function() {
+  console.log("Express server listening on port " + app.get('port'));
 });
+
+var io = socketio.listen(httpServer);
 
 io.sockets.on('connection', function (socket) {
   socket.on('my other event', function (data) {
