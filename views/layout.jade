@@ -1,0 +1,15 @@
+doctype 5
+html(lang='en')
+  head
+    title= title
+    link(rel='stylesheet', href='/css/style.css')
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js')
+    link(rel='stylesheet', href='/css/bootstrap.min.css')
+    script(src='/js/bootstrap.min.js')
+  body
+    .container
+        .span12
+            - if (typeof(messages) != 'undefined')
+                != flashMessages(messages)
+        .span12
+            block content

@@ -1,0 +1,17 @@
+{
+  "name": "vinefeed",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "express": "3.0.0rc3",
+    "jade": "*",
+    "recess": "*",
+    "connect": "*",
+    "uglify-js": "*",
+    "jshint": "*",
+    "twit": "*"
+  }
+}
