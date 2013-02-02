@@ -12,6 +12,7 @@
     "connect": "*",
     "uglify-js": "*",
     "jshint": "*",
-    "twit": "*"
+    "twit": "*",
+    "socket.io": "*"
   }
 }
