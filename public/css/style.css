@@ -7,15 +7,13 @@ a {
   color: #00B7FF;
 }
 
-/*.magnify {
+.magnify {
 	width: 200px;
 	height: 200px;
-	-moz-transitions: all 1s ease-in-out 0s;
-}*/
+	-webkit-transition: all 1s ease-in-out 0s;
+}
 
-/*.magnify:hover {
+.magnify:hover {
 	width:300px; 
 	height:300px;
-	-webkit-transitions:  width 2s ease, height 2s ease;
-	-webkit-transitions-direction:ease-in;
-}*/
+}
