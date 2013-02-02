@@ -61,6 +61,18 @@ var twit = new Twit({
 })
 
 io.sockets.on('connection', function (socket) {
+  socket.on('pause', function(data) {
+    if (twit.stream.stop {
+      twit.stream.stop();
+    };
+  });
+
+  socket.on('resume', function(data) {
+    if (twit.stream.start {
+      twit.stream.start();
+    };
+  });
+
   socket.on('track', function(data) {
     if (twit.stream.stop)
       twit.stream.stop();
@@ -80,6 +92,7 @@ io.sockets.on('connection', function (socket) {
       });
     });
   });
+  
   socket.on('location', function(data) {
     if (twit.stream.stop)
       twit.stream.stop();
