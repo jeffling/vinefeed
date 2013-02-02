@@ -62,13 +62,13 @@ var twit = new Twit({
 
 io.sockets.on('connection', function (socket) {
   socket.on('pause', function(data) {
-    if (twit.stream.stop {
+    if (twit.stream.stop) {
       twit.stream.stop();
     };
   });
 
   socket.on('resume', function(data) {
-    if (twit.stream.start {
+    if (twit.stream.start) {
       twit.stream.start();
     };
   });
@@ -92,7 +92,7 @@ io.sockets.on('connection', function (socket) {
       });
     });
   });
-  
+
   socket.on('location', function(data) {
     if (twit.stream.stop)
       twit.stream.stop();
