@@ -44,7 +44,6 @@ app.configure('development', function() {
 // routes
 var routes = {};
 routes.common = require('./routes/common');
-routes.twitter = require('./routes/twitter');
 app.get('/', routes.common.index);
 
 var httpServer = http.createServer(app);
