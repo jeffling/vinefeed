@@ -1,7 +1,4 @@
-var socket = io.connect('http://localhost');
-
-
-//$(document).ready(function() { 
+$(document).ready(function() { 
 
 var socket = io.connect('http://localhost');
 
@@ -34,7 +31,7 @@ socket.on('tweet', function (data) {
 // 		$("#videos div:last-child").remove();
 // 	}
 });
-
+}); 
 /* Updates videos based on search params */
 function searchHandler()
 {
