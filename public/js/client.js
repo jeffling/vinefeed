@@ -7,9 +7,18 @@ socket.on('tweet', function (data) {
     this.volume(0);
     this.play();
   });
+  
+  // // mouseover in mouseover out callbacks
+  // $("#" + data.tweet.id).hover(function(event){
+  //   _V_(String(data.tweet.id)).volume(1);
+  //   alert("test");
+  // }, function(event) {
+  //   _V_(String(data.tweet.id)).volume(0);
+  // });
+
 
 if ($("#videos").children().length > 8) {
-		$("#videos video:last-child").remove();
+		$("#videos div:last-child").remove();
 	}
 });
 
