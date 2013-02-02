@@ -10,7 +10,6 @@
     "jade": "*",
     "recess": "*",
     "connect": "*",
-    "uglify-js": "*",
     "jshint": "*",
     "twit": "*",
     "socket.io": "*"
