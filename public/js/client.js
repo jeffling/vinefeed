@@ -44,16 +44,13 @@ socket.on('tweet', function (data) {
     $("#" + data.tweet.id).parent().css("z-index", "1");
   });
 
-  if ($("#videos").children().length == 8) {
-  	socket.emit('stop', {});
-  }
 
 });
 
-}); 
-/* Updates videos based on search params */
-function searchHandler()
-{
-  window.location.hash = $("#search").attr('value');
+$('#searchbar').submit(function() {
+  var search_query = $("input:first").val();
+  alert(search_query);
+  return false;
+});
 
-}
+}); 
