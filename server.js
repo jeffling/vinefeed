@@ -77,6 +77,7 @@ io.sockets.on('connection', function (socket) {
           t.vid_url = pattern.exec(body)[0];
           t.user = tweet.user.screen_name;
           t.id = tweet.id;
+          t.text = tweet.text;
           socket.volatile.emit('tweet', {tweet: t});
         }
       });
