@@ -40,9 +40,9 @@ socket.on('tweet', function (data) {
     $("#" + data.tweet.id).parent().css("z-index", "1");
   });
 
-// if ($("#videos").children().length > 8) {
-// 		$("#videos div:last-child").remove();
-// 	}
+  if ($("#videos").children().length == 8) {
+  	socket.emit('stop', {});
+  }
 });
 
 /* Updates videos based on search params */
