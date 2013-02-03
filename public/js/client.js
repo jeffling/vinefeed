@@ -17,10 +17,19 @@ socket.on('tweet', function (data) {
 	}
   var new_video = $("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin magnify' loop preload='auto' width='200' height='200' src='" + 
       data.tweet.vid_url + "''></video>");
+  var tooltip = $("<div class='ttip'>@" + data.tweet.user + ': ' + data.tweet.text + "</div>");
   new_video.fadeIn("slow").css("display","inline-block");
-  new_video.qtip({content: '@' + data.tweet.user + ': ' + data.tweet.text, show: 'mouseover', hide: 'mouseout'});
+  /*new_video.qtip({content: '@' + data.tweet.user + ': ' + data.tweet.text, width: 200, show: 'mouseover', hide: 'mouseout',  position: {
+      corner: {
+         target: 'bottomLeft',
+         tooltip: 'topMiddle'
+      },
+      adjust:{
+        x:100
+      },
+   }});*/
 
-	$("<div class='item' style='left: " + list[Math.floor(i% 4)] + "'>").append(new_video).appendTo("#row" + Math.floor(i/4));
+	$("<div class='item' style='left: " + list[Math.floor(i% 4)] + "'>").append(new_video).append(tooltip).appendTo("#row" + Math.floor(i/4));
 	i++;
 
   _V_(String(data.tweet.id)).ready(function() {

@@ -37,3 +37,22 @@ a {
 	z-index: 1;
 	margin-right: 15px;
 }
+
+div.ttip {
+	visibility: hidden;
+	opacity:0;
+	z-index:9000;
+	width:188px;
+	-webkit-transition: all 1s ease-in-out 0s;
+	border: 1px solid #CCCCCC;
+	padding:5px;
+	top:100px;
+	background:#FFFFFF;
+}
+
+.magnify:hover + div.ttip {
+	opacity: 1;
+	visibility: visible;
+	width:288px;
+	z-index:9000;
+};
