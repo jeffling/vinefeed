@@ -46,3 +46,23 @@ a {
 	width: 200px;
 	height: 200px; -webkit-transition: all .2s ease-in-out; }
 .bigger:hover { -webkit-transform: scale(1.5); }
+
+div.ttip {
+	position:relative;
+	visibility: hidden;
+	opacity:0;
+	z-index:9999;
+	width:188px;
+	-webkit-transition: all .2s ease-in-out 0s;
+	border: 1px solid #CCCCCC;
+	padding:5px;
+	background:#FFFFFF;
+}
+
+.bigger:hover + div.ttip {
+	opacity: 1;
+	visibility: visible;
+	top:50px;
+	left:-50px;
+	width:288px;
+};
