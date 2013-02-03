@@ -12,7 +12,12 @@ var i = 0;
 socket.on('tweet', function (data) {
 
 	if (Math.floor(i % 4) == 0) {
-		$("<div id='row" + Math.floor(i/4) + "' class='row-fluid show-grid' style='position:absolute;'>").appendTo("#videos");
+		$("<div id='row" + Math.floor(i/4) + "' class='row-fluid show-grid'>").appendTo("#videos");
+		if (i > 4) {
+			var current_row = $("#row" + Math.floor(i/4));
+			var prev_top_css = current_row.prev().position().top;
+			current_row.css({"position" : "absolute", "top" : prev_top_css});
+		}
 	}
 	var new_video = $("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin magnify' loop preload='auto' width='200' height='200' src='" + 
 	    data.tweet.vid_url + "''></video>");
