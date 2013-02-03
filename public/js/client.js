@@ -9,10 +9,12 @@ socket.on('connect', function() {
 
 
 socket.on('tweet', function (data) {
-	$("<div>").append(
-		$("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin magnify' loop preload='auto' width='200' height='200' src='" + 
-    	data.tweet.vid_url + "''></video>")
-	).fadeIn("slow").css("display","inline-block").appendTo("#videos");
+  var new_video = $("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin magnify' loop preload='auto' width='200' height='200' src='" + 
+      data.tweet.vid_url + "''></video>");
+  new_video.fadeIn("slow").css("display","inline-block");
+  new_video.qtip({content: 'Tweeted by ' + data.tweet.user, show: 'mouseover', hide: 'mouseout'});
+	$("<div>").append(new_video).appendTo("#videos");
+		
 
   _V_(String(data.tweet.id)).ready(function() {
     this.volume(0);
