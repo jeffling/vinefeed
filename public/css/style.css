@@ -7,6 +7,11 @@ a {
   color: #00B7FF;
 }
 
+#bottom_border {
+	width: 100%;
+	height: 100px;
+}
+
 .magnify {
 	width: 200px;
 	height: 200px;
@@ -16,4 +21,19 @@ a {
 .magnify:hover {
 	width:300px; 
 	height:300px;
+}
+
+.row {
+	display: block;
+	width: 900px;
+	height: 200px;
+	margin-top: 10px;
+}
+
+.item {
+	display: inline-block;
+	float: left;
+	position: absolute;
+	z-index: 1;
+	margin-right: 15px;
 }
