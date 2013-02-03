@@ -19,12 +19,6 @@ a {
 .magnify {
 	width: 200px;
 	height: 200px;
-	-webkit-transition: all 0.5s ease-in-out 0s;
-}
-
-.magnify:hover {
-	width:300px; 
-	height:300px;
 }
 
 .item {
@@ -36,3 +30,8 @@ a {
 	margin-top: 10px;
 	margin-bottom: 20px;
 }
+
+.bigger {
+	width: 200px;
+	height: 200px; -webkit-transition: all .2s ease-in-out; }
+.bigger:hover { -webkit-transform: scale(1.5); }
