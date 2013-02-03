@@ -7,6 +7,17 @@ a {
   color: #00B7FF;
 }
 
+.white_head {
+	color: white;
+	display: inline-block;
+	vertical-align: top;
+	font-size: 35pt;
+}
+
+.hero_unit {
+	background-color: #00AC7F;
+}
+
 .container {
 	width: 100%;
 }
