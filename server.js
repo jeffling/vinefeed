@@ -65,7 +65,7 @@ var twit = new Twit({
 
 io.sockets.on('connection', function (socket) {
   socket.on('track', function(data) {
-    twit.get('search/tweets', { q: 'cats source:vine_for_ios', result_type: 'recent', count: 12 }, function (err, reply) {
+    twit.get('search/tweets', { q: data.track + ' source:vine_for_ios', result_type: 'recent', count: 12 }, function (err, reply) {
       if (err)
         console.log(err);
       for (var i = 0; i < reply.statuses.length; i++) {
@@ -76,7 +76,6 @@ io.sockets.on('connection', function (socket) {
         t.user = tweet.user.screen_name;
         t.id = tweet.id;
         t.text = tweet.text;
-        console.log(tweet.source);
         request(vine_url, function (error, response, body) {
           var pattern = /https\:\/\/vines\.s3\.amazonaws.com\/videos\/.*?\.mp4/;
           var match = pattern.exec(body);

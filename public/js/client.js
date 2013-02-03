@@ -4,7 +4,7 @@ var socket = io.connect('http://localhost');
 
 // initialize by finding all vine things
 socket.on('connect', function() {
-  socket.emit('track', { track: 'vine co v' });
+  socket.emit('track', { track: 'cats' });
 });
 
 var i = 0;
@@ -12,11 +12,11 @@ var i = 0;
 socket.on('tweet', function (data) {
 
 	if (Math.floor(i % 4) == 0) {
-		$("<div id='row" + Math.floor(i/4) + "' class='row-fluid show-grid'>").appendTo("#videos");
-		if (i > 4) {
+		$("<div id='row" + Math.floor(i/4) + "' class='row show-grid'>").appendTo("#videos");
+		if (i > 3) {
 			var current_row = $("#row" + Math.floor(i/4));
-			var prev_top_css = current_row.prev().position().top;
-			current_row.css({"position" : "absolute", "top" : prev_top_css});
+			var prev_top_css = current_row.prev().position().top + 230;
+			current_row.css({"position" : "absolute", "top" : prev_top_css + "px"});
 		}
 	}
 	var new_video = $("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin magnify' loop preload='auto' width='200' height='200' src='" + 
