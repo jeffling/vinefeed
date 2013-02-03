@@ -44,7 +44,6 @@ app.configure('development', function() {
 // routes
 var routes = {};
 routes.common = require('./routes/common');
-routes.twitter = require('./routes/twitter');
 app.get('/', routes.common.index);
 
 var httpServer = http.createServer(app);
@@ -69,7 +68,7 @@ global.last_query = '';
 io.sockets.on('connection', function (socket) {
   socket.on('track', function(data) {
     global.last_query = data.track;
-    twit.get('search/tweets', { q: data.track + ' source:vine_for_ios exclude:retweets', result_type: 'recent', count: 11 }, function (err, reply) {
+    twit.get('search/tweets', { q: data.track + ' source:vine_for_ios exclude:retweets', result_type: 'recent', count: 12 }, function (err, reply) {
       if (err)
         console.log(err);
       for (var i = 0; i < reply.statuses.length; i++) {
