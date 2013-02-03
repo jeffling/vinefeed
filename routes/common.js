@@ -4,7 +4,7 @@
  */
 
 exports.index = function(req, res){
-  res.render('index', { title: 'vinefeed' });
+  res.render('index', { title: 'Vinefeed' });
 };
 
 exports.ensureAuthenticated = function(req, res, next) {

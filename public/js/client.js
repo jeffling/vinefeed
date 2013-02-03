@@ -4,32 +4,27 @@ var socket = io.connect('http://localhost');
 
 // initialize by finding all vine things
 socket.on('connect', function() {
-  socket.emit('track', { track: 'vine co v'});
+  socket.emit('track', { track: 'vine' });
 });
 
 var i = 0;
-var list = ["", "300px", "515px", "730px"];
 
 socket.on('tweet', function (data) {
 
 	if (Math.floor(i % 4) == 0) {
-		$("<div id='row" + Math.floor(i/4) + "' class='row' style='margin-left: 0px;'>").appendTo("#videos");
+		$("<div id='row" + Math.floor(i/4) + "' class='row show-grid'>").appendTo("#videos");
+		if (i > 3) {
+			var current_row = $("#row" + Math.floor(i/4));
+			var prev_top_css = current_row.prev().position().top + 230;
+			current_row.css({"position" : "absolute", "top" : prev_top_css + "px"});
+		}
 	}
-  var new_video = $("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin magnify' loop preload='auto' width='200' height='200' src='" + 
+  var new_video = $("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin bigger magnify' loop preload='auto' width='200' height='200' src='" + 
       data.tweet.vid_url + "''></video>");
   var tooltip = $("<div class='ttip'>@" + data.tweet.user + ': ' + data.tweet.text + "</div>");
-  new_video.fadeIn("slow").css("display","inline-block");
-  /*new_video.qtip({content: '@' + data.tweet.user + ': ' + data.tweet.text, width: 200, show: 'mouseover', hide: 'mouseout',  position: {
-      corner: {
-         target: 'bottomLeft',
-         tooltip: 'topMiddle'
-      },
-      adjust:{
-        x:100
-      },
-   }});*/
+  new_video.fadeIn("slow");
 
-	$("<div class='item' style='left: " + list[Math.floor(i% 4)] + "'>").append(new_video).append(tooltip).appendTo("#row" + Math.floor(i/4));
+	$("<div class='span3 item'>").append(new_video).append(tooltip).appendTo("#row" + Math.floor(i/4));
 	i++;
 
   _V_(String(data.tweet.id)).ready(function() {
@@ -52,7 +47,7 @@ socket.on('tweet', function (data) {
   if ($("#videos").children().length == 8) {
   	socket.emit('stop', {});
   }
-  
+
 });
 
 }); 
