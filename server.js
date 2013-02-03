@@ -66,25 +66,29 @@ var twit = new Twit({
 
 io.sockets.on('connection', function (socket) {
   socket.on('track', function(data) {
-    twit.get('search/tweets', { q: data.track, result_type: 'recent', count: 12 }, function (err, reply) {
-      for (var tweet in reply.statuses) {
-        console.log(tweet);
-
+    twit.get('search/tweets', { q: 'cats source:vine_for_ios', result_type: 'recent', count: 12 }, function (err, reply) {
+      if (err)
+        console.log(err);
+      for (var i = 0; i < reply.statuses.length; i++) {
+        var tweet = reply.statuses[i];
         var t = {};
-        var text_splits = tweet.text.split(' ');
+        var text_splits = tweet.text.split(/\s/);
         var vine_url = text_splits[text_splits.length - 1];
+        t.user = tweet.user.screen_name;
+        t.id = tweet.id;
+        t.text = tweet.text;
+        console.log(tweet.source);
         request(vine_url, function (error, response, body) {
           var pattern = /https\:\/\/vines\.s3\.amazonaws.com\/videos\/.*?\.mp4/;
           var match = pattern.exec(body);
           if (match != null && !error && response.statusCode == 200) {
-            t.vid_url = pattern.exec(body)[0];
-            t.user = tweet.user.screen_name;
-            t.id = tweet.id;
-            t.text = tweet.text;
-            console.log(t);
-            socket.volatile.emit('tweet', {tweet: t});
+            this.vid_url = match[0];
+            socket.volatile.emit('tweet', {tweet: this});
           }
-        });
+          else {
+            console.log('failed to load tweet : ' + this.text);
+          }
+        }.bind(t));
       }
     });
     // twit.stream('statuses/filter', { track: data.track }).on('tweet', function (tweet) {
