@@ -69,7 +69,7 @@ global.last_query = '';
 io.sockets.on('connection', function (socket) {
   socket.on('track', function(data) {
     global.last_query = data.track;
-    twit.get('search/tweets', { q: data.track + ' source:vine_for_ios exclude:retweets', result_type: 'recent', count: 12 }, function (err, reply) {
+    twit.get('search/tweets', { q: data.track + ' source:vine_for_ios exclude:retweets', result_type: 'recent', count: 11 }, function (err, reply) {
       if (err)
         console.log(err);
       for (var i = 0; i < reply.statuses.length; i++) {
@@ -100,6 +100,7 @@ io.sockets.on('connection', function (socket) {
     });
   });
   socket.on('more', function(data) {
+    console.log('global last query: ' + global.last_query);
     twit.get('search/tweets', { q: global.last_query + ' source:vine_for_ios exclude:retweets', result_type: 'recent', count: 12, max_id: global.last_twitter_id }, 
     function (err, reply) {
       if (err)

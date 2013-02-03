@@ -19,6 +19,7 @@ socket.on('tweet', function (data) {
 			current_row.css({"position" : "absolute", "top" : prev_top_css + "px"});
 		}
 	}
+
   var new_video = $("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin bigger magnify' loop preload='auto' width='200' height='200' src='" + 
       data.tweet.vid_url + "''></video>");
   var tooltip = $("<div class='ttip'>@" + data.tweet.user + ': ' + data.tweet.text + "</div>");
@@ -50,10 +51,12 @@ socket.on('tweet', function (data) {
 
 });
 
-}); 
-/* Updates videos based on search params */
-function searchHandler()
-{
-  window.location.hash = $("#search").attr('value');
+$('.form-more').submit(function() {
+  socket.emit('more', {});
+  return false;
+});
 
-}
+
+
+
+}); 
