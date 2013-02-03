@@ -4,7 +4,7 @@ var socket = io.connect('http://localhost');
 
 // initialize by finding all vine things
 socket.on('connect', function() {
-  socket.emit('track', { track: 'vine co v'});
+  socket.emit('track', { track: 'vine co v' });
 });
 
 var i = 0;
