@@ -65,9 +65,10 @@ var twit = new Twit({
 });
 
 global.last_twitter_id = 2979671857232896000000;
-
+global.last_query = '';
 io.sockets.on('connection', function (socket) {
   socket.on('track', function(data) {
+    global.last_query = data.track;
     twit.get('search/tweets', { q: data.track + ' source:vine_for_ios', result_type: 'recent', count: 12 }, function (err, reply) {
       if (err)
         console.log(err);
@@ -99,7 +100,7 @@ io.sockets.on('connection', function (socket) {
     });
   });
   socket.on('more', function(data) {
-    twit.get('search/tweets', { q: data.track + ' source:vine_for_ios', result_type: 'recent', count: 12, max_id: global.last_twitter_id }, 
+    twit.get('search/tweets', { q: global.last_query + ' source:vine_for_ios', result_type: 'recent', count: 12, max_id: global.last_twitter_id }, 
     function (err, reply) {
       if (err)
         console.log(err);
