@@ -1,17 +1,15 @@
 extends layout
 
 block content
-  script(src='/js/client.js')
-  h1= title
-  p Welcome to #{title}
-  form
-    input#search(type="search")
-    input(type="submit", onclick="searchHandler();")
-
-  #test
-  
-  #videos
-
-  #bottom_border
-
-
+  .row
+    .span12
+      script(src='/js/client.js')
+      h1= title
+      p Welcome to #{title}
+      form
+      input#search(type="search")
+      input(type="submit", onclick="searchHandler();")
+  .row
+    #videos
+  .row
+    #bottom_border
