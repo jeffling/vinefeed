@@ -55,5 +55,10 @@ $(document).ready(function() {
     return false;
   });
 
+  $('.form-more').submit(function() {
+    socket.emit('more', {});
+    return false;
+  });
+
 }); 
 
