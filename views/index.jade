@@ -4,12 +4,14 @@ block content
   .row
     .span12
       script(src='/js/client.js')
-      h1= title
-      p Welcome to #{title}
-      form
-      input#search(type="search")
-      input(type="submit", onclick="searchHandler();")
+      .hero-unit
+        img(src='/img/vine_icon.png', style="width:8%")
+        h1.white_head(style="font-size:35pt")= 'inefeed'
+        p Welcome to #{title}
+        form
+        input#search(type="search")
+        input(type="submit", onclick="searchHandler();")
   .row
-    #videos
+    .span12#videos
   .row
     #bottom_border
