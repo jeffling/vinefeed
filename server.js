@@ -62,24 +62,10 @@ var twit = new Twit({
     // consumer_secret:      'uuGskJNWtcUtFQ1Axll41jRhfmUM1dPixBiLIcnMjA',
     // access_token:         '436379768-WBGlOaKu7buJcjDyOECoguuD4dRt4QwI10CPoROP', 
     // access_token_secret:  'p8TnnMSu0R95BqduDmvXvD9LIajUSAdb0stblauei0'
-})
+});
 
 io.sockets.on('connection', function (socket) {
-  socket.on('pause', function(data) {
-    if (twit.stream.stop) {
-      twit.stream.stop();
-    };
-  });
-
-  socket.on('resume', function(data) {
-    if (twit.stream.start) {
-      twit.stream.start();
-    };
-  });
-
   socket.on('track', function(data) {
-    if (twit.stream.stop)
-      twit.stream.stop();
     twit.stream('statuses/filter', { track: data.track }).on('tweet', function (tweet) {
       var t = {};
       var text_splits = tweet.text.split(' ');
@@ -94,26 +80,12 @@ io.sockets.on('connection', function (socket) {
           socket.volatile.emit('tweet', {tweet: t});
         }
       });
-    });
-  });
-
-  socket.on('location', function(data) {
-    if (twit.stream.stop)
-      twit.stream.stop();
-    twit.stream('statuses/filter', { locations: data.locations }).on('tweet', function (tweet) {
-      var t = {};
-      var text_splits = tweet.text.split(' ');
-      var vine_url = text_splits[text_splits.length - 1];
-      request(vine_url, function (error, response, body) {
-        var pattern = /https\:\/\/vines\.s3\.amazonaws.com\/videos\/.*?\.mp4/;
-        var match = pattern.exec(body);
-        if (match != null && !error && response.statusCode == 200) {
-          t.vid_url = pattern.exec(body)[0];
-          t.user = tweet.user.screen_name;
-          t.id = tweet.id;
-          socket.volatile.emit('tweet', {tweet: t});
-        }
+      socket.on('stop', function(data) {
+        twit.stream.stop();
       });
-    });    
+      socket.on('start', function(data) {
+        twit.stream.start();
+      });
+    });
   });
 });

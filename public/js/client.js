@@ -1,7 +1,4 @@
-var socket = io.connect('http://localhost');
-
-
-//$(document).ready(function() { 
+$(document).ready(function() { 
 
 var socket = io.connect('http://localhost');
 
@@ -43,8 +40,10 @@ socket.on('tweet', function (data) {
   if ($("#videos").children().length == 8) {
   	socket.emit('stop', {});
   }
+  
 });
 
+}); 
 /* Updates videos based on search params */
 function searchHandler()
 {
