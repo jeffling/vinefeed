@@ -8,16 +8,15 @@ socket.on('connect', function() {
 });
 
 var i = 0;
-var list = ["", "300px", "515px", "730px"];
 
 socket.on('tweet', function (data) {
 	if (Math.floor(i % 4) == 0) {
-		$("<div id='row" + Math.floor(i/4) + "' class='row' style='margin-left: 0px;'>").appendTo("#videos");
+		$("<div id='row" + Math.floor(i/4) + "' class='row-fluid show-grid' style='position:absolute;'>").appendTo("#videos");
 	}
-	$("<div class='item' style='left: " + list[Math.floor(i% 4)] + "'>").append(
+	$("<div class='span3 item'>").append(
 		$("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin magnify' loop preload='auto' width='200' height='200' src='" + 
     	data.tweet.vid_url + "''></video>")
-	).fadeIn("slow").css("display","inline-block").appendTo("#row" + Math.floor(i/4));
+	).fadeIn("slow").appendTo("#row" + Math.floor(i/4));
 	i++;
 
   _V_(String(data.tweet.id)).ready(function() {
@@ -40,7 +39,7 @@ socket.on('tweet', function (data) {
   if ($("#videos").children().length == 8) {
   	socket.emit('stop', {});
   }
-  
+
 });
 
 }); 
