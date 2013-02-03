@@ -22,7 +22,7 @@ $(document).ready(function() {
     }
     var new_video = $("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin bigger magnify' loop preload='auto' width='200' height='200' src='" + 
         data.tweet.vid_url + "''></video>");
-    var tooltip = $("<div class='ttip'>@" + data.tweet.user + ': ' + data.tweet.text + "</div>");
+    var tooltip = $("<div class='ttip'><a href='http://www.twitter.com/"+data.tweet.user+"'>@" + data.tweet.user + '</a>: ' + data.tweet.text + "</div>");
     new_video.fadeIn("slow");
 
     $("<div class='span3 item'>").append(new_video).append(tooltip).appendTo("#row" + Math.floor(i/4));
