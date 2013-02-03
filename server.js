@@ -66,7 +66,7 @@ var twit = new Twit({
 
 io.sockets.on('connection', function (socket) {
   socket.on('track', function(data) {
-    twit.stream('statuses/filter', { track: data.track }).on('tweet', function (tweet) {
+    twit.stream('statuses/filter', { track: data.track, count: 8 }).on('tweet', function (tweet) {
       var t = {};
       var text_splits = tweet.text.split(' ');
       var vine_url = text_splits[text_splits.length - 1];
@@ -77,6 +77,7 @@ io.sockets.on('connection', function (socket) {
           t.vid_url = pattern.exec(body)[0];
           t.user = tweet.user.screen_name;
           t.id = tweet.id;
+          t.text = tweet.text;
           socket.volatile.emit('tweet', {tweet: t});
         }
       });
