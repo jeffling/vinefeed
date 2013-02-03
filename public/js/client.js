@@ -11,6 +11,7 @@ var i = 0;
 var list = ["", "300px", "515px", "730px"];
 
 socket.on('tweet', function (data) {
+
 	if (Math.floor(i % 4) == 0) {
 		$("<div id='row" + Math.floor(i/4) + "' class='row' style='margin-left: 0px;'>").appendTo("#videos");
 	}
