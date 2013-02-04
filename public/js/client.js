@@ -26,13 +26,15 @@ $(document).ready(function() {
     new_video.fadeIn("slow");
 
     $("<div class='span3 item'>").append(new_video).append(tooltip).appendTo("#row" + Math.floor(i/4));
+    new_video.parent().hide();
     i++;
 
     _V_(String(data.tweet.id)).ready(function() {
       this.volume(0);
+      $("#" + data.tweet.id).parent().show();
     });
 
-    $("#" + String(data.tweet.id)).css({"width": "", "height" : ""});
+    $("#" + data.tweet.id).css({"width": "", "height" : ""});
     
     // mouseover in mouseover out callbacks
     $("#" + data.tweet.id).hover(function(){
@@ -46,7 +48,6 @@ $(document).ready(function() {
       $(this).children().prop('controls', false);
       $("#" + data.tweet.id).parent().css("z-index", "1");
     });
-
   });
 
   $('#searchbar').submit(function() {
