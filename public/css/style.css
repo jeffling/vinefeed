@@ -44,8 +44,19 @@ a {
 
 .bigger {
 	width: 200px;
-	height: 200px; -webkit-transition: all .2s ease-in-out; }
-.bigger:hover { -webkit-transform: scale(1.5); }
+	height: 200px;
+	transition: all .2s ease-in-out;
+	-moz-transition: all .2s ease-in-out;
+	-o-transition: all .2s ease-in-out;
+	-webkit-transition: all .2s ease-in-out;
+}
+
+.bigger:hover {
+	transform: scale(1.5);
+	-webkit-transform: scale(1.5);
+	-moz-transform: scale(1.5);
+	-o-transform: scale(1.5);
+}
 
 div.ttip {
 	position:relative;
@@ -53,10 +64,13 @@ div.ttip {
 	opacity:0;
 	z-index:9999;
 	width:188px;
-	-webkit-transition: all .2s ease-in-out 0s;
 	border: 1px solid #CCCCCC;
 	padding:5px;
 	background:#FFFFFF;
+	transition: all .2s ease-in-out;
+	-moz-transition: all .2s ease-in-out;
+	-o-transition: all .2s ease-in-out;
+	-webkit-transition: all .2s ease-in-out;
 }
 
 .bigger:hover + div.ttip {
