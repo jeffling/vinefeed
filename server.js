@@ -8,7 +8,8 @@ var express = require('express'),
   socketio = require('socket.io'),
   Twit = require('twit'),
   request = require('request'), 
-  twitter = require('./twitter');
+  twitter = require('./twitter'),
+  config = require('./config');
 ;
 // mongoose = require('mongoose'),
 var app = express();
@@ -50,16 +51,7 @@ httpServer.listen(app.get('port'), function() {
 });
 
 var io = socketio.listen(httpServer);
-var twit = new Twit({
-  // consumer_key:         'gA11sspNJdtdCL2gWDQqFA', 
-  // consumer_secret:      'uhBxdHaryjLcAcC9D985WYNbyT9LAzK03FMDbfnBZfc',
-  // access_token:         '150977185-F3trFzvsc3qjFd8DlrMbkWJXjj97IiHkifvP4EjR', 
-  // access_token_secret:  'GOA66sBv471fk8HPYSwomCsarmeO17FYg0Fa6Ao9E'
-  consumer_key: '4McGP8uCDmQUsIMIPxrIBQ',
-  consumer_secret: 'uuGskJNWtcUtFQ1Axll41jRhfmUM1dPixBiLIcnMjA',
-  access_token: '436379768-WBGlOaKu7buJcjDyOECoguuD4dRt4QwI10CPoROP',
-  access_token_secret: 'p8TnnMSu0R95BqduDmvXvD9LIajUSAdb0stblauei0'
-});
+var twit = new Twit(config.twitConfig);
 
 global.last_twitter_id = 2979671857232896000000; // arbitrarily high number. probably should do something smarter. 
 global.last_query = '';
@@ -87,7 +79,7 @@ io.sockets.on('connection', function(socket) {
   //   var text_splits = tweet.text.split(' ');
   //   var vine_url = text_splits[text_splits.length - 1];
   //   request(vine_url, function (error, response, body) {
-  //     var pattern = /https\:\/\/vines\.s3\.amazonaws.com\/videos\/.*?\.mp4/;
+  //     var pattern = /https\:\/\/vines\.s3\.amazonaws.com\/videos\/.* ?\.mp4/;
   //     var match = pattern.exec(body);
   //     if (match != null && !error && response.statusCode == 200) {
   //       t.vid_url = pattern.exec(body)[0];
