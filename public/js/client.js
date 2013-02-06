@@ -11,7 +11,6 @@ $(document).ready(function() {
 
   var i = 0;
   socket.on('tweet', function (data) {
-
     if (Math.floor(i % 4) == 0) {
       $("<div id='row" + Math.floor(i/4) + "' class='row show-grid'>").appendTo("#videos");
       if (i > 3) {
@@ -28,29 +27,30 @@ $(document).ready(function() {
     new_video.parent().hide();
     i++;
 
+    // player settings
+    $("#" + data.tweet.id).css({"width": "", "height" : ""});
+
     _V_(String(data.tweet.id)).ready(function() {
       this.volume(0);
       $("#" + data.tweet.id).parent().fadeIn("slow").show();
     });
 
-    $("#" + data.tweet.id).css({"width": "", "height" : ""});
-    
-    // mouseover in mouseover out callbacks
+    // mouseover in, mouseover out callbacks
     $("#" + data.tweet.id).hover(function(){
       _V_(String(data.tweet.id)).volume(1);
       _V_(String(data.tweet.id)).play();
-      $(this).children().prop('controls', true);
+      // $(this).children().prop('controls', true);
       $("#" + data.tweet.id).parent().css("z-index", "2");
     }, function() {
       _V_(String(data.tweet.id)).volume(0);
       _V_(String(data.tweet.id)).pause();
-      $(this).children().prop('controls', false);
+      // $(this).children().prop('controls', false);
       $("#" + data.tweet.id).parent().css("z-index", "1");
     });
   });
 
   $('#searchbar').submit(function() {
-    filter = $("input:first").val();
+    filter = $("input:first").val(); //TODO: Use identifiers
     $("#videos").empty();
     i = 0;
     socket.emit('track', { track: filter });
