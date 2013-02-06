@@ -7,10 +7,9 @@ var express = require('express'),
   path = require('path'),
   socketio = require('socket.io'),
   Twit = require('twit'),
-  request = require('request'), 
+  request = require('request'),
   twitter = require('./twitter'),
-  config = require('./config');
-;
+  config = require('./config');;
 // mongoose = require('mongoose'),
 var app = express();
 // app.locals = require(' ./locals');
