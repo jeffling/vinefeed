@@ -12,6 +12,7 @@ exports.sendTweet = function(socket) {
       t.user = tweet.user.screen_name;
       t.id = tweet.id;
       t.text = tweet.text;
+      t.vine_url = vine_url;
       // update global last_twitter_id
       if(global.last_twitter_id > tweet.id) {
         global.last_twitter_id = tweet.id;
