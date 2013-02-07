@@ -2,6 +2,10 @@ var filter = 'vine';
 
 $(document).ready(function() {
 
+  if(navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
+    VideoJS.options.techOrder = ['flash'];
+  }
+
   var socket = io.connect();
 
   // initialize by finding all vine things
@@ -15,7 +19,7 @@ $(document).ready(function() {
   socket.on('tweet', function(data) {
     if(Math.floor(i % 4) == 0) {
       $("<div id='row" + Math.floor(i / 4) + "' class='row show-grid'>").appendTo("#videos");
-      if(i > 3) { 
+      if(i > 3) {
         var current_row = $("#row" + Math.floor(i / 4));
         var prev_top_css = current_row.prev().position().top + 230;
         current_row.css({
@@ -25,24 +29,27 @@ $(document).ready(function() {
       }
     }
     var vine_link = $("<a>", {
-      href:data.tweet.vine_url
+      href: data.tweet.vine_url
     });
     var new_video = $("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin bigger magnify' loop preload='metadata' width='200' height='200' src='" + data.tweet.vid_url + "''></video>");
     var tooltip = $("<div class='ttip'>@" + data.tweet.user + ': ' + data.tweet.text + "</div>")
     $("<div class='span3 item'>").append(new_video).append(tooltip).appendTo("#row" + Math.floor(i / 4));
+    i++;    
 
-    i++;
+    $("#" + data.tweet.id).parent().wrap(vine_link);
 
-    // player settings
+    // hide the parent initially until loaded
+    $("#" + data.tweet.id).parent().hide();
+
     $("#" + data.tweet.id).css({
       "width": "",
       "height": ""
     });
-    $("#" + data.tweet.id).parent().hide();
-    $("#" + data.tweet.id).parent().wrap(vine_link);
 
+    // when video is loaded (or at the very least the thumbnail)
     _V_(String(data.tweet.id)).addEvent("loadeddata", function() {
       this.volume(0);
+      alert('shit');
       $("#" + data.tweet.id).parent().fadeIn("slow").show();
     });
 
