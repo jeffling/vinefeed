@@ -32,19 +32,18 @@ $(document).ready(function() {
     $("<div class='span3 item'>").append(new_video).append(tooltip).appendTo("#row" + Math.floor(i / 4));
 
     i++;
-    new_video.parent().hide();
 
     // player settings
     $("#" + data.tweet.id).css({
       "width": "",
       "height": ""
     });
+    $("#" + data.tweet.id).parent().hide();
+    $("#" + data.tweet.id).parent().wrap(vine_link);
 
-    _V_(String(data.tweet.id)).ready(function() {
+    _V_(String(data.tweet.id)).addEvent("loadeddata", function() {
       this.volume(0);
       $("#" + data.tweet.id).parent().fadeIn("slow").show();
-      $("#" + data.tweet.id).parent('selector expression')().wrap(vine_link);
-
     });
 
     // mouseover in, mouseover out callbacks
