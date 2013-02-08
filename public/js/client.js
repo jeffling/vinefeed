@@ -29,7 +29,7 @@ $(document).ready(function() {
       }
     }
     var vine_link = $("<a>", {
-      href: data.tweet.vine_url
+      href: "https://twitter.com/" + data.tweet.user + "/status/" + data.tweet.id
     });
     var new_video = $("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin bigger magnify' loop preload='metadata' width='200' height='200' src='" + data.tweet.vid_url + "''></video>");
     var tooltip = $("<div class='ttip'>@" + data.tweet.user + ': ' + data.tweet.text + "</div>")
