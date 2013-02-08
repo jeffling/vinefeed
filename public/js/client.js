@@ -1,18 +1,26 @@
-var filter = 'vine';
 
+
+// if firefox, default to flash
+if(navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
+  VideoJS.options={techOrder:["flash","html5"]};
+  console.log (_V_.options.techOrder);
+}
+var filter = 'vine';
 $(document).ready(function() {
 
-  if(navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
-    VideoJS.options.techOrder = ['flash'];
-  }
-
   var socket = io.connect();
+  var virgin = true;
 
   // initialize by finding all vine things
   socket.on('connect', function() {
-    socket.emit('track', {
-      track: filter
-    });
+    if (virgin) {
+      socket.emit('track', {
+        track: filter
+      });
+    }
+  });
+  socket.on('disconnect', function () {
+    virgin = false;
   });
 
   var i = 0;
@@ -45,6 +53,7 @@ $(document).ready(function() {
       "width": "",
       "height": ""
     });
+
 
     // when video is loaded (or at the very least the thumbnail)
     _V_(data.tweet.id).addEvent("loadeddata", function() {
