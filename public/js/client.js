@@ -47,21 +47,20 @@ $(document).ready(function() {
     });
 
     // when video is loaded (or at the very least the thumbnail)
-    _V_(String(data.tweet.id)).addEvent("loadeddata", function() {
+    _V_(data.tweet.id).addEvent("loadeddata", function() {
       this.volume(0);
-      alert('shit');
       $("#" + data.tweet.id).parent().fadeIn("slow").show();
     });
 
     // mouseover in, mouseover out callbacks
     $("#" + data.tweet.id).hover(function() {
-      _V_(String(data.tweet.id)).volume(1);
-      _V_(String(data.tweet.id)).play();
+      _V_(data.tweet.id).volume(1);
+      _V_(data.tweet.id).play();
       // $(this).children().prop('controls', true);
       $("#" + data.tweet.id).parent().css("z-index", "2");
     }, function() {
-      _V_(String(data.tweet.id)).volume(0);
-      _V_(String(data.tweet.id)).pause();
+      _V_(data.tweet.id).volume(0);
+      _V_(data.tweet.id).pause();
       // $(this).children().prop('controls', false);
       $("#" + data.tweet.id).parent().css("z-index", "1");
     });

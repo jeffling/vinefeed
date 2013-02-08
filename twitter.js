@@ -10,7 +10,7 @@ exports.sendTweet = function(socket) {
       var text_splits = tweet.text.split(/\s/);
       var vine_url = text_splits[text_splits.length - 1];
       t.user = tweet.user.screen_name;
-      t.id = tweet.id;
+      t.id = tweet.id_str;
       t.text = tweet.text;
       t.vine_url = vine_url;
       // update global last_twitter_id
