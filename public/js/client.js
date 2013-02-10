@@ -1,4 +1,19 @@
+// spinner for loading video
+$.fn.spin = function(opts) {
+  this.each(function() {
+    var $this = $(this),
+        data = $this.data();
 
+    if (data.spinner) {
+      data.spinner.stop();
+      delete data.spinner;
+    }
+    if (opts !== false) {
+      data.spinner = new Spinner($.extend({color: $this.css('color')}, opts)).spin(this);
+    }
+  });
+  return this;
+};
 
 // if firefox, default to flash
 if(navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
@@ -36,9 +51,11 @@ $(document).ready(function() {
         });
       }
     }
+
     var vine_link = $("<a>", {
       href: "https://twitter.com/" + data.tweet.user + "/status/" + data.tweet.id
     });
+
     var new_video = $("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin bigger magnify' loop preload='metadata' width='200' height='200' src='" + data.tweet.vid_url + "''></video>");
     var tooltip = $("<div class='ttip'>@" + data.tweet.user + ': ' + data.tweet.text + "</div>")
     $("<div class='span3 item'>").append(new_video).append(tooltip).appendTo("#row" + Math.floor(i / 4));
@@ -47,7 +64,8 @@ $(document).ready(function() {
     $("#" + data.tweet.id).parent().wrap(vine_link);
 
     // hide the parent initially until loaded
-    $("#" + data.tweet.id).parent().hide();
+    $("#" + data.tweet.id).parent().children().hide();
+    $("#" + data.tweet.id).parent().spin();
 
     $("#" + data.tweet.id).css({
       "width": "",
@@ -57,8 +75,9 @@ $(document).ready(function() {
 
     // when video is loaded (or at the very least the thumbnail)
     _V_(data.tweet.id).addEvent("loadeddata", function() {
+      $("#" + data.tweet.id).parent().spin(false);
       this.volume(0);
-      $("#" + data.tweet.id).parent().fadeIn("slow").show();
+      $("#" + data.tweet.id).parent().children().children().fadeIn("slow").show();
     });
 
     // mouseover in, mouseover out callbacks
