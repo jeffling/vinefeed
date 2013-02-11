@@ -53,22 +53,22 @@ var io = socketio.listen(httpServer);
 var twit = new Twit(config.twitConfig);
 
 global.last_twitter_id = 2979671857232896000000; // arbitrarily high number. probably should do something smarter. 
-global.last_query = '';
+global.last_query = {};
 io.sockets.on('connection', function(socket) {
   socket.on('track', function(data) {
-    global.last_query = data.track;
+    global.last_query = data;
     twit.get('search/tweets', {
       q: data.track + ' source:vine_for_ios exclude:retweets',
-      result_type: 'recent',
-      count: 12,
+      result_type: data.result_type,
+      count: data.count,
     }, twitter.sendTweet(socket));
   });
   socket.on('more', function(data) {
     console.log('global last query: ' + global.last_query);
     twit.get('search/tweets', {
-      q: global.last_query + ' source:vine_for_ios exclude:retweets',
-      result_type: 'recent',
-      count: 12,
+      q: global.last_query.track + ' source:vine_for_ios exclude:retweets',
+      result_type: data.last_query.result_type,
+      count: data.last_query.count,
       max_id: global.last_twitter_id
     }, twitter.sendTweet(socket));
   });

@@ -17,8 +17,10 @@ $.fn.spin = function(opts) {
 
 // if firefox, default to flash
 if(navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
-  VideoJS.options={techOrder:["flash","html5"]};
-  console.log (_V_.options.techOrder);
+  VideoJS.options = {
+    techOrder: ["flash", "html5"]
+  };
+  console.log(_V_.options.techOrder);
 }
 var filter = 'vine';
 $(document).ready(function() {
@@ -28,15 +30,16 @@ $(document).ready(function() {
 
   // initialize by finding all vine things
   socket.on('connect', function() {
-    if (virgin) {
+    if(virgin) {
       socket.emit('track', {
-        track: filter
+        track: filter,
+        result_type: 'recent',
+        count: 12
       });
+      virgin = false;
     }
   });
-  socket.on('disconnect', function () {
-    virgin = false;
-  });
+
 
   var i = 0;
   socket.on('tweet', function(data) {
@@ -59,7 +62,7 @@ $(document).ready(function() {
     var new_video = $("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin bigger magnify' loop preload='metadata' width='200' height='200' src='" + data.tweet.vid_url + "''></video>");
     var tooltip = $("<div class='ttip'>@" + data.tweet.user + ': ' + data.tweet.text + "</div>")
     $("<div class='span3 item'>").append(new_video).append(tooltip).appendTo("#row" + Math.floor(i / 4));
-    i++;    
+    i++;
 
     $("#" + data.tweet.id).parent().wrap(vine_link);
 
@@ -103,5 +106,11 @@ $(document).ready(function() {
     });
     return false;
   });
+
+  // $(window).scroll(function() {
+  //   if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
+  //     socket.emit('more', {});
+  //   }
+  // });
 
 });

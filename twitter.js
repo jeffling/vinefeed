@@ -18,7 +18,7 @@ exports.sendTweet = function(socket) {
         global.last_twitter_id = tweet.id;
         console.log(global.last_twitter_id);
       }
-      request(vine_url, function(error, response, body) {
+      request( vine_url, function(error, response, body) {
         var pattern = /https\:\/\/vines\.s3\.amazonaws.com\/videos\/.*?\.mp4/;
         var match = pattern.exec(body);
         if(match != null && !error && response.statusCode == 200) {
@@ -30,7 +30,7 @@ exports.sendTweet = function(socket) {
       }.bind({
         socket: this,
         t: t
-      }));
+      }) );
     }
   }.bind(socket)
 }
