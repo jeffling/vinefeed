@@ -82,12 +82,15 @@ $(document).ready(function() {
     presentTweet(data);
   });
 
+  // element callbacks
   $('#searchbar').submit(function() {
     state.filter = $("input:first").val(); //TODO: Use identifiers
     $("#videos").empty();
     state.i = 0;
     socket.emit('track', {
-      track: state.filter
+      track: state.filter,
+      result_type: 'recent',
+      count: 12
     });
     return false;
   });
