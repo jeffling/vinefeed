@@ -64,7 +64,6 @@ io.sockets.on('connection', function(socket) {
     }, twitter.sendTweet(socket));
   });
   socket.on('more', function(data) {
-    console.log('global last query: ' + global.last_query);
     twit.get('search/tweets', {
       q: global.last_query.track + ' source:vine_for_ios exclude:retweets',
       result_type: data.last_query.result_type,
