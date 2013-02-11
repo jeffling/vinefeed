@@ -61,16 +61,19 @@ io.sockets.on('connection', function(socket) {
       q: data.track + ' source:vine_for_ios exclude:retweets',
       result_type: data.result_type,
       count: data.count,
-    }, twitter.sendTweet(socket));
-  });
-  socket.on('more', function(data) {
-    twit.get('search/tweets', {
-      q: global.last_query.track + ' source:vine_for_ios exclude:retweets',
-      result_type: data.last_query.result_type,
-      count: data.last_query.count,
       max_id: global.last_twitter_id
     }, twitter.sendTweet(socket));
   });
+
+
+  // socket.on('more', function(data) {
+  //   twit.get('search/tweets', {
+  //     q: global.last_query.track + ' source:vine_for_ios exclude:retweets',
+  //     result_type: data.last_query.result_type,
+  //     count: data.last_query.count,
+  //     max_id: global.last_twitter_id
+  //   }, twitter.sendTweet(socket));
+  // });
 
   // twit.stream('statuses/filter', { track: data.track }).on('tweet', function (tweet) {
   //   var t = {};

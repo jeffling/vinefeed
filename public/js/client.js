@@ -1,8 +1,9 @@
 // Application state variables
 var state = {
-  filter: 'vine',
-  virgin: true,
-  i: 0
+  filter: 'vine',  // initial filter - all tweets will have vine in the title. hopefully. 
+  virgin: true,  // first run or not
+  i: 0, // daryn's crazy row thing
+  loading: 0; // keep track of how many videos are still loading
 };
 
 function presentTweet(data) {
@@ -37,6 +38,7 @@ function presentTweet(data) {
   _V_(data.tweet.id).addEvent("loadeddata", function() {
     $("#" + data.tweet.id).parent().spin(false);
     $("#" + data.tweet.id).parent().children().fadeIn("slow").show();
+    state.loading -= 1;
     this.volume(0);
   });
   // mouseover in, mouseover out callbacks
@@ -73,10 +75,11 @@ $(document).ready(function() {
         result_type: 'recent',
         count: 12
       });
+      state.loading += 12;
       state.virgin = false;
     }
   });
-
+  // when we get a tweet from the server
   socket.on('tweet', function(data) {
     presentTweet(data);
   });
@@ -90,6 +93,7 @@ $(document).ready(function() {
       result_type: 'recent',
       count: 12
     });
+    state.loading += 12;
     return false;
   });
 

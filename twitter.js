@@ -2,8 +2,12 @@ var request = require('request');
 
 // return a bound function with socket
 exports.sendTweet = function(socket) {
-  return function(err, reply) {;
-    console.log(err);
+  return function(err, reply) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    var failures = 0;
     for(var i = 0; i < reply.statuses.length; i++) {
       var tweet = reply.statuses[i];
       var t = {};
@@ -14,7 +18,7 @@ exports.sendTweet = function(socket) {
       t.text = tweet.text;
       t.vine_url = vine_url;
       // update global last_twitter_id
-      if(global.last_twitter_id > tweet.id) {
+      if( global.last_twitter_id > tweet.id ) {
         global.last_twitter_id = tweet.id;
         console.log(global.last_twitter_id);
       }
@@ -26,11 +30,26 @@ exports.sendTweet = function(socket) {
           this.socket.volatile.emit('tweet', {
             tweet: this.t
           });
-        } else console.log('failed to load tweet : ' + this.text);
+        }
+        // note and and keep track of failure 
+        else {
+          console.log('failed to load tweet : ' + this.text);
+          failure += 1;
+        }
       }.bind({
         socket: this,
-        t: t
+        t: t,
+        failures = failures
       }) );
+    }
+    // if failures are detected, fetch more tweets bitch
+    if ( failures > 0 ) {
+      twit.get('search/tweets', {
+        q: global.last_query.track + ' source:vine_for_ios exclude:retweets',
+        result_type: global.last_query.result_type,
+        count: failures,
+        max_id: global.last_twitter_id
+      }, twitter.sendTweet(socket));
     }
   }.bind(socket)
 }
