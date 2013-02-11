@@ -1,8 +1,8 @@
 // Application state variables
 var state = {
-  filter : 'vine', 
-  virgin : true, 
-  i : 0
+  filter: 'vine',
+  virgin: true,
+  i: 0
 };
 
 function presentTweet(data) {
@@ -28,9 +28,9 @@ function presentTweet(data) {
   $("#" + data.tweet.id).parent().wrap(vine_link);
   // load spinner
   $("#" + data.tweet.id).parent().spin();
+  // need to be done when player is ready to account for video.js preprocessing
   _V_(data.tweet.id).addEvent("ready", function() {
     // hide the parent initially until loaded. 
-    // need to be done when player is ready to account for video.js preprocessing
     $("#" + data.tweet.id).parent().children().hide();
   });
   // when video is loaded (or at the very least the thumbnail)
@@ -65,7 +65,6 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
 
 $(document).ready(function() {
   var socket = io.connect();
-
   // initialize by finding all vine things
   socket.on('connect', function() {
     if(state.virgin) {
@@ -81,7 +80,6 @@ $(document).ready(function() {
   socket.on('tweet', function(data) {
     presentTweet(data);
   });
-
   // element callbacks
   $('#searchbar').submit(function() {
     state.filter = $("input:first").val(); //TODO: Use identifiers
