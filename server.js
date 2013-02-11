@@ -60,13 +60,8 @@ io.sockets.on('connection', function(socket) {
     twit.get('search/tweets', {
       q: data.track + ' source:vine_for_ios exclude:retweets',
       result_type: data.result_type,
-<<<<<<< HEAD
       count: data.count
       // max_id: global.last_twitter_id
-=======
-      count: data.count,
-      max_id: global.last_twitter_id
->>>>>>> c23f1529885022b16f0ba55d2844a5ca090e8046
     }, twitter.sendTweet(socket));
   });
 

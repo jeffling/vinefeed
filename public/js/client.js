@@ -3,11 +3,8 @@ var state = {
   filter: 'vine',  // initial filter - all tweets will have vine in the title. hopefully. 
   virgin: true,  // first run or not
   i: 0, // daryn's crazy row thing
-<<<<<<< HEAD
   loading: 0 // keep track of how many videos are still loading
-=======
-  loading: 0; // keep track of how many videos are still loading
->>>>>>> c23f1529885022b16f0ba55d2844a5ca090e8046
+
 };
 
 function presentTweet(data) {
