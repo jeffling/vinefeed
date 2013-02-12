@@ -6,9 +6,29 @@ var state = {
   virgin: true,
   // daryn's crazy row thing
   i: 0,
+  // max_id for keeping track of which video is what
+  max_id: '0'
 };
 
+function clearVideos() {
+    $(".spinner").remove();
+    $("#videos").empty();
+    state.i = 0;
+}
+
+function fetchTweets(query) {
+  $.getJSON('api/tweets', query, function (data) {
+        for (var x = 0; x < data.length; x++ )
+          presentTweet(data[x]);
+      } );
+}
+
+
 function presentTweet(data) {
+  // set max_id
+  if (state.max_id == 0 || state.max_id > data.id)
+    state.max_id = data.id;
+
   if(Math.floor(state.i % 4) == 0) {
     $("<div id='row" + Math.floor(state.i / 4) + "' class='row show-grid'>").appendTo("#videos");
     if(state.i > 3) {
@@ -29,12 +49,13 @@ function presentTweet(data) {
     href: "https://twitter.com/" + data.user + "/status/" + data.id
   });
   $("#" + data.id).parent().wrap(vine_link);
-  // load spinner
-  $("#" + data.id).parent().spin();
+
   // need to be done when player is ready to account for video.js preprocessing
   _V_(data.id).addEvent("loadstart", function() {
     // hide the parent initially until loaded. 
     $("#" + data.id).hide();
+    // load spinner
+    $("#" + data.id).parent().spin();
   });
   // when video is loaded (or at the very least the thumbnail)
   _V_(data.id).addEvent("loadeddata", function() {
@@ -68,16 +89,11 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
 $(document).ready(function() {
   // initialize by finding all vine things
   if( state.virgin ) {
-    $.getJSON('api/tweets',{  
-      track: state.filter,
+    fetchTweets({track: state.filter,
       result_type: 'recent',
-      count: 12}, function (data) {
-        for (var x = 0; x < data.length; x++ )
-          presentTweet(data[x]);
-      } );
+      count: 12});
     state.virgin = false;
   }
-
 
   // element callbacks
   $('#searchbar').submit(function() {
@@ -85,28 +101,21 @@ $(document).ready(function() {
     if(state.filter == '') {
       state.filter = 'vine';
     }
-    $("#videos").empty();
-    state.i = 0;
-    $.getJSON('api/tweets',{  
+    clearVideos();
+    state.max_id = 0;
+    fetchTweets({  
       track: state.filter,
       result_type: 'recent',
-      count: 12}, function (data) {
-        for (var x = 0; x < data.length; x++ )
-          presentTweet(data[x]);
-      } );
+      count: 12});
     return false;
   });
 
-  // still can't handle this shit
-  // $(window).scroll(function() {
-  //   if(($(window).scrollTop() >= $(document).height() - $(window).height() - 10) && (state.loading == 0) && (state.virgin == false)) {
-  //     console.log('more requested');
-  //     socket.emit('track', {
-  //       track: state.filter,
-  //       result_type: 'recent',
-  //       count: 12
-  //     });
-  //     state.loading += 12;
-  //   }
-  // });
+  $('#moreBtn').click(function() {
+    clearVideos();
+    fetchTweets({  
+    track: state.filter,
+    result_type: 'recent',
+    count: 12,
+    max_id: state.max_id});
+  });
 });
