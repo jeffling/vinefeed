@@ -4,12 +4,7 @@
 "use strict";
 var express = require('express'),
   http = require('http'),
-  path = require('path'),
-  socketio = require('socket.io'),
-  Twit = require('twit'),
-  request = require('request'),
-  twitter = require('./twitter'),
-  config = require('./config');;
+  path = require('path');
 // mongoose = require('mongoose'),
 var app = express();
 // app.locals = require(' ./locals');
@@ -42,31 +37,15 @@ app.configure('development', function() {
 // routes
 var routes = {};
 routes.common = require('./routes/common');
+routes.api = require('./routes/api');
+
 app.get('/', routes.common.index);
+app.get('/api/tweets', routes.api.getTweets);
 
 var httpServer = http.createServer(app);
 httpServer.listen(app.get('port'), function() {
   console.log("Express server listening on port " + app.get('port'));
 });
-
-
-// TODO: Move this stuff elsewhere?
-var io = socketio.listen(httpServer);
-var twit = new Twit(config.twitConfig);
-
-global.last_twitter_id = 0;
-global.last_query = {};
-io.sockets.on('connection', function(socket) {
-  socket.on('track', function(data) {
-    global.last_query = data;
-    twit.get('search/tweets', {
-      q: data.track + ' source:vine_for_ios exclude:retweets',
-      result_type: data.result_type,
-      count: data.count,
-      max_id: global.last_twitter_id
-    }, twitter.sendTweet(socket));
-  });
-
 
   // socket.on('more', function(data) {
   //   twit.get('search/tweets', {
@@ -99,4 +78,3 @@ io.sockets.on('connection', function(socket) {
   //     twit.stream.start();
   //   });
   // });
-});

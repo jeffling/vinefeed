@@ -71,25 +71,16 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
 
 
 $(document).ready(function() {
-  var socket = io.connect();
   // initialize by finding all vine things
-  socket.on('connect', function() {
-    console.log('connected')
-    if(state.virgin) {
-      socket.emit('track', {
-        track: state.filter,
-        result_type: 'recent',
-        count: 12
-      });
-      state.loading += 12;
-      state.virgin = false;
-    }
-  });
-  // when we get a tweet from the server
-  socket.on('tweet', function(data) {
-    console.log('tweet recieved');
-    presentTweet(data);
-  });
+  if( state.virgin ) {
+    $.getJSON('api/tweets',{  
+      track: state.filter,
+      result_type: 'recent',
+      count: 12} );
+    state.virgin = false;
+  }
+
+
   // element callbacks
   $('#searchbar').submit(function() {
     state.filter = $("input:first").val(); //TODO: Use identifiers
@@ -98,11 +89,10 @@ $(document).ready(function() {
     }
     $("#videos").empty();
     state.i = 0;
-    socket.emit('track', {
+    $.getJSON('api/tweets',{  
       track: state.filter,
       result_type: 'recent',
-      count: 12
-    });
+      count: 12} );
     state.loading += 12;
     return false;
   });
