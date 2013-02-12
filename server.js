@@ -54,7 +54,7 @@ httpServer.listen(app.get('port'), function() {
 var io = socketio.listen(httpServer);
 var twit = new Twit(config.twitConfig);
 
-global.last_twitter_id = 0; // arbitrarily high number. probably should do something smarter. 
+global.last_twitter_id = 0;
 global.last_query = {};
 io.sockets.on('connection', function(socket) {
   socket.on('track', function(data) {

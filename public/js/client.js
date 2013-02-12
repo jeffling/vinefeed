@@ -1,12 +1,13 @@
 // Application state variables
 var state = {
-  filter: 'vine',
   // initial filter - all tweets will have vine in the title. hopefully. 
-  virgin: true,
+  filter: 'vine',
   // first run or not
-  i: 0,
+  virgin: true,
   // daryn's crazy row thing
-  loading: 0 // keep track of how many videos are still loading
+  i: 0,
+  // keep track of how many videos are still loading
+  loading: 0 
 };
 
 function presentTweet(data) {
