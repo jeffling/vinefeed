@@ -87,6 +87,8 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
 
 
 $(document).ready(function() {
+  $('#searchBtn').hide();
+
   // initialize by finding all vine things
   if( state.virgin ) {
     fetchTweets({track: state.filter,
@@ -96,8 +98,14 @@ $(document).ready(function() {
   }
 
   // element callbacks
-  $('#searchbar').submit(function() {
-    state.filter = $("input:first").val(); //TODO: Use identifiers
+  $('#searchBar').keydown(function() {
+    if ($('#moreBtn').is(":visible")) {
+      $('#moreBtn').hide();
+      $('#searchBtn').show();
+    }
+  });
+  $('#searchBtn').click(function() {
+    state.filter = $('#searchBar').val(); //TODO: Use identifiers
     if(state.filter == '') {
       state.filter = 'vine';
     }
@@ -107,15 +115,22 @@ $(document).ready(function() {
       track: state.filter,
       result_type: 'recent',
       count: 12});
+    $(this).hide();
+    $('#moreBtn').show();
     return false;
   });
 
   $('#moreBtn').click(function() {
     clearVideos();
     fetchTweets({  
-    track: state.filter,
-    result_type: 'recent',
-    count: 12,
-    max_id: state.max_id});
+      track: state.filter,
+      result_type: 'recent',
+      count: 12,
+      max_id: state.max_id});
+    return false;
   });
+
+  $('#searchForm').submit(function() {
+    return false;
+  })
 });

@@ -8,11 +8,11 @@ block content
         img(src='/img/vine_icon.png', style="width:8%")
         h1.white_head(style="font-size:35pt")= 'inefeed'
         p Welcome to #{title}
-        form.form-search#searchbar
+        form.form-search#searchForm
           div.input-append
-            input(type="text", class="span2 search-query")
-            button(type="submit", class="btn")="Search"
-        button#moreBtn(type="button", class="btn")="More"
+            input#searchBar(type="text", class="span2 search-query")
+            button#searchBtn(type="submit", class="btn")="Search"
+            button#moreBtn(type="submit", class="btn", )="More"
   .row
     .span12#videos
 
