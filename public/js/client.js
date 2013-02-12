@@ -1,10 +1,12 @@
 // Application state variables
 var state = {
-  filter: 'vine',  // initial filter - all tweets will have vine in the title. hopefully. 
-  virgin: true,  // first run or not
-  i: 0, // daryn's crazy row thing
+  filter: 'vine',
+  // initial filter - all tweets will have vine in the title. hopefully. 
+  virgin: true,
+  // first run or not
+  i: 0,
+  // daryn's crazy row thing
   loading: 0 // keep track of how many videos are still loading
-
 };
 
 function presentTweet(data) {
@@ -19,9 +21,9 @@ function presentTweet(data) {
       });
     }
   }
-  var new_video = $("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin bigger magnify' loop preload='metadata' width='200' height='200' src='" + data.tweet.vid_url + "''></video>");
+  var new_video = $("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin bigger magnify' loop preload='metadata' width='200' height='200' src='" + data.tweet.vid_url + "'></video>");
   var tooltip = $("<div class='ttip'>@" + data.tweet.user + ': ' + data.tweet.text + "</div>")
-  $("<div class='span3 item'>").append(new_video).append(tooltip).appendTo("#row" + Math.floor(state.i / 4));
+  $("<div id='" + data.tweet.id + "-container' class='span3 item'>").append(new_video).append(tooltip).appendTo("#row" + Math.floor(state.i / 4));
   state.i++;
   // wrap the vine feed thing with an link
   var vine_link = $("<a>", {
@@ -40,6 +42,7 @@ function presentTweet(data) {
     $("#" + data.tweet.id).parent().spin(false);
     $("#" + data.tweet.id).parent().children().fadeIn("slow").show();
     state.loading -= 1;
+    console.log(state.loading);
     this.volume(0);
   });
   // mouseover in, mouseover out callbacks
@@ -83,12 +86,13 @@ $(document).ready(function() {
   });
   // when we get a tweet from the server
   socket.on('tweet', function(data) {
+    console.log('tweet recieved');
     presentTweet(data);
   });
   // element callbacks
   $('#searchbar').submit(function() {
     state.filter = $("input:first").val(); //TODO: Use identifiers
-    if (state.filter = '') {
+    if(state.filter == '') {
       state.filter = 'vine';
     }
     $("#videos").empty();
@@ -102,9 +106,16 @@ $(document).ready(function() {
     return false;
   });
 
+  // still can't handle this shit
   // $(window).scroll(function() {
-  //   if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
-  //     socket.emit('more', {});
+  //   if(($(window).scrollTop() >= $(document).height() - $(window).height() - 10) && (state.loading == 0) && (state.virgin == false)) {
+  //     console.log('more requested');
+  //     socket.emit('track', {
+  //       track: state.filter,
+  //       result_type: 'recent',
+  //       count: 12
+  //     });
+  //     state.loading += 12;
   //   }
   // });
 });

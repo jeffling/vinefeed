@@ -49,10 +49,12 @@ httpServer.listen(app.get('port'), function() {
   console.log("Express server listening on port " + app.get('port'));
 });
 
+
+// TODO: Move this stuff elsewhere?
 var io = socketio.listen(httpServer);
 var twit = new Twit(config.twitConfig);
 
-global.last_twitter_id = 2979671857232896000000; // arbitrarily high number. probably should do something smarter. 
+global.last_twitter_id = 0; // arbitrarily high number. probably should do something smarter. 
 global.last_query = {};
 io.sockets.on('connection', function(socket) {
   socket.on('track', function(data) {
@@ -60,8 +62,8 @@ io.sockets.on('connection', function(socket) {
     twit.get('search/tweets', {
       q: data.track + ' source:vine_for_ios exclude:retweets',
       result_type: data.result_type,
-      count: data.count
-      // max_id: global.last_twitter_id
+      count: data.count,
+      max_id: global.last_twitter_id
     }, twitter.sendTweet(socket));
   });
 
