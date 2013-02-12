@@ -6,8 +6,6 @@ var state = {
   virgin: true,
   // daryn's crazy row thing
   i: 0,
-  // keep track of how many videos are still loading
-  loading: 0 
 };
 
 function presentTweet(data) {
@@ -22,41 +20,39 @@ function presentTweet(data) {
       });
     }
   }
-  var new_video = $("<video id='" + data.tweet.id + "' class='video-js vjs-default-skin bigger magnify' loop preload='metadata' width='200' height='200' src='" + data.tweet.vid_url + "'></video>");
-  var tooltip = $("<div class='ttip'>@" + data.tweet.user + ': ' + data.tweet.text + "</div>")
-  $("<div id='" + data.tweet.id + "-container' class='span3 item'>").append(new_video).append(tooltip).appendTo("#row" + Math.floor(state.i / 4));
+  var new_video = $("<video id='" + data.id + "' class='video-js vjs-default-skin bigger magnify' loop preload='metadata' width='200' height='200' src='" + data.vid_url + "'></video>");
+  var tooltip = $("<div class='ttip'>@" + data.user + ': ' + data.text + "</div>")
+  $("<div id='" + data.id + "-container' class='span3 item'>").append(new_video).append(tooltip).appendTo("#row" + Math.floor(state.i / 4));
   state.i++;
   // wrap the vine feed thing with an link
   var vine_link = $("<a>", {
-    href: "https://twitter.com/" + data.tweet.user + "/status/" + data.tweet.id
+    href: "https://twitter.com/" + data.user + "/status/" + data.id
   });
-  $("#" + data.tweet.id).parent().wrap(vine_link);
+  $("#" + data.id).parent().wrap(vine_link);
   // load spinner
-  $("#" + data.tweet.id).parent().spin();
+  $("#" + data.id).parent().spin();
   // need to be done when player is ready to account for video.js preprocessing
-  _V_(data.tweet.id).addEvent("ready", function() {
+  _V_(data.id).addEvent("loadstart", function() {
     // hide the parent initially until loaded. 
-    $("#" + data.tweet.id).parent().children().hide();
+    $("#" + data.id).hide();
   });
   // when video is loaded (or at the very least the thumbnail)
-  _V_(data.tweet.id).addEvent("loadeddata", function() {
-    $("#" + data.tweet.id).parent().spin(false);
-    $("#" + data.tweet.id).parent().children().fadeIn("slow").show();
-    state.loading -= 1;
-    console.log(state.loading);
+  _V_(data.id).addEvent("loadeddata", function() {
+    $("#" + data.id).parent().spin(false);
+    $("#" + data.id).fadeIn("slow").show();
     this.volume(0);
   });
   // mouseover in, mouseover out callbacks
-  $("#" + data.tweet.id).hover(function() {
-    _V_(data.tweet.id).volume(1);
-    _V_(data.tweet.id).play();
+  $("#" + data.id).hover(function() {
+    _V_(data.id).volume(1);
+    _V_(data.id).play();
     // $(this).children().prop('controls', true);
-    $("#" + data.tweet.id).parent().css("z-index", "2");
+    $("#" + data.id).parent().css("z-index", "2");
   }, function() {
-    _V_(data.tweet.id).volume(0);
-    _V_(data.tweet.id).pause();
+    _V_(data.id).volume(0);
+    _V_(data.id).pause();
     // $(this).children().prop('controls', false);
-    $("#" + data.tweet.id).parent().css("z-index", "1");
+    $("#" + data.id).parent().css("z-index", "1");
   });
 }
 
@@ -66,7 +62,6 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
   VideoJS.options = {
     techOrder: ["flash", "html5"]
   };
-  console.log(_V_.options.techOrder);
 }
 
 
@@ -76,7 +71,10 @@ $(document).ready(function() {
     $.getJSON('api/tweets',{  
       track: state.filter,
       result_type: 'recent',
-      count: 12} );
+      count: 12}, function (data) {
+        for (var x = 0; x < data.length; x++ )
+          presentTweet(data[x]);
+      } );
     state.virgin = false;
   }
 
@@ -92,8 +90,10 @@ $(document).ready(function() {
     $.getJSON('api/tweets',{  
       track: state.filter,
       result_type: 'recent',
-      count: 12} );
-    state.loading += 12;
+      count: 12}, function (data) {
+        for (var x = 0; x < data.length; x++ )
+          presentTweet(data[x]);
+      } );
     return false;
   });
 

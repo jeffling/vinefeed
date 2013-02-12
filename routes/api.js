@@ -11,5 +11,5 @@ exports.getTweets = function(req, res) {
 		result_type: req.query.result_type,
 		count: req.query.count,
 		max_id: req.query.last_twitter_id
-	}, twitter.getTweet(res));
+	}, twitter.getTweet(res, req.query.count));
 };
