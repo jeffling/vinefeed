@@ -19,7 +19,7 @@ function clearVideos() {
     $('#' + i + '-player').hide();
     $('#' + i + '-spinner').show();
     $('#' + i + '-ttip').html();
-    $('#' + i + '-ttip').hide();
+    $('.ttip').hide();
     $('.vine_link').prop('href', '#');
   }
 }
@@ -41,7 +41,7 @@ function playersInit(data) {
       spinner = $("<img id='" + i + "-spinner' class='spinner' src='img/ajax-loader.gif'>");
       $('#item-' + i).append(spinner).append(player).append(ttip);
       $('#item-' + i).wrap($("<a>", {
-        id: 'i-link',
+        id: i + '-link',
         class: "vine_link",
         href: "#"
       }));
@@ -72,7 +72,7 @@ function presentTweet(data, i) {
 
   _V_(i + '-player').src(data.vid_url);
   $('#' + i + '-ttip').html('<strong>@' + data.user + '</strong> - ' + data.text);
-  $('#' + i + '-item').prop('href', "https://twitter.com/" + data.user + "/status/" + data.id);
+  $('#' + i + '-link').prop('href', "https://twitter.com/" + data.user + "/status/" + data.id);
   /* Setup video and place in row.
      1. Set video
      2. Set tooltip
@@ -118,6 +118,7 @@ function presentTweet(data, i) {
 
 $(document).ready(function() {
   playersInit();
+  clearVideos();
   // initialize by finding all vine things
   if(state.virgin) {
     fetchTweets({
