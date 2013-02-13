@@ -36,7 +36,7 @@ function presentTweet(data) {
 
   //create a row for every 4 videos
   if(Math.floor(state.i % 4) == 0) {
-    $("<div id='row" + Math.floor(state.i / 4) + "' class='row show-grid'>").appendTo("#videos");
+    $("<div id='row" + Math.floor(state.i / 4) + "' class='row show-grid' style='position: absolute;'>").appendTo("#videos");
     if(state.i > 3) {
       var current_row = $("#row" + Math.floor(state.i / 4));
       var prev_top_css = current_row.prev().position().top + 230;
@@ -54,7 +54,7 @@ function presentTweet(data) {
      4. Set poster
    */
   var new_video = $("<video id='" + data.id + "' class='video-js vjs-default-skin bigger magnify' loop preload='metadata' width='200' height='200' src='" + data.vid_url + "'></video>");
-  var poster = $("<img id='" + data.id + "-poster' class='poster' src=' " + data.thumb_url +  "'></img>");
+  var poster = $("<img id='" + data.id + "-poster' class='poster' src=' " + data.thumb_url +  "' width='200' height='200'>");
   var tooltip = $("<div class='ttip'>@" + data.user + ': ' + data.text + "</div>")
   $("<div id='" + data.id + "-container' class='span3 item'>").append(new_video).append(poster).append(tooltip).appendTo("#row" + Math.floor(state.i / 4));
   state.i++;
