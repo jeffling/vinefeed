@@ -3,7 +3,11 @@ var state = {
   // initial filter - all tweets will have vine in the title. hopefully. 
   filter: 'vine',
   // max_id for keeping track of which video is what
-  max_id: '0'
+  max_id: '0',
+  // how many tweets we want
+  count: 12,
+  // result_type
+  result_type: 'recent'
 };
 
 
@@ -16,12 +20,12 @@ function playersInit(data) {
       player = $("<video id='" + i + "-player' class='video-js vjs-default-skin bigger magnify' loop preload='metadata' width='200' height='200'></video>");
       ttip = $('<div>', {
         id: i + '-ttip',
-        'class':'ttip'
+        'class': 'ttip'
       });
       spinner = $('<img>', {
         id: i + '-spinner',
-        'class':'spinner',
-        src:'img/ajax-loader.gif'
+        'class': 'spinner',
+        src: 'img/ajax-loader.gif'
       });
       $('#item-' + i).append(spinner).append(player).append(ttip);
       $('#item-' + i).wrap($("<a>", {
@@ -72,10 +76,27 @@ function clearVideos() {
 
 // Fetches the tweets from the server given a twitter API query
 function fetchTweets(query) {
-  console.log(query);
-  $.getJSON('api/tweets', query, function(data) {
-    for(var i = 0; i < data.length; i++)
-    presentTweet(data[i], i);
+  $.ajax({
+    dataType: 'json',
+    url: 'api/tweets',
+    data: query,
+    success: function(data) {
+      for(var i = 0; i < data.length; i++)
+      presentTweet(data[i], i);
+      for(; i < state.count; i++)
+      $('#' + i + '-spinner').hide();
+    },
+    error: function(jqXHR) {
+      console.log(jqXHR);
+      var alert = $('<div>', {
+        'class': 'alert',
+        html: '<strong>' + jqXHR.statusText + '</strong> - ' + jqXHR.responseText + '<a class="close" data-dismiss="alert" href="#">&times;</a>'
+      })
+      $('#videos').prepend(alert);
+      $('.alert').alert();
+      $('.spinner').hide();
+    },
+    timeout: 5000
   });
 }
 
@@ -84,8 +105,7 @@ function fetchTweets(query) {
 // Sets the players to the new tweets
 function presentTweet(data, i) {
   // set max_id to avoid duplicate videos
-  if(state.max_id == 0 || state.max_id > data.id) state.max_id = data.id;
-
+  if(state.max_id == 0 || state.max_id > data.id) state.max_id = data.id - 1;
   _V_(i + '-player').src(data.vid_url);
   $('#' + i + '-ttip').html('<strong>@' + data.user + '</strong> - ' + data.text);
   $('#' + i + '-link').prop('href', "https://twitter.com/" + data.user + "/status/" + data.id);
@@ -94,11 +114,10 @@ function presentTweet(data, i) {
 
 // sets the window has
 function setHash() {
-  if ($('#searchBar').val() == '') {
+  if($('#searchBar').val() == '') {
     document.location.hash == ''
     state.filter = 'vine';
-  }
-  else {
+  } else {
     document.location.hash = $('#searchBar').val();
     state.filter = document.location.hash.slice(1);
   }
@@ -109,14 +128,14 @@ $(document).ready(function() {
   playersInit();
   clearVideos();
   // initialize by finding all vine things
-  if (document.location.hash != '') {
+  if(document.location.hash != '') {
     state.filter = document.location.hash.slice(1);
-    $('#searchBar').val(document.location.hash.slice(1)); 
+    $('#searchBar').val(document.location.hash.slice(1));
   }
   fetchTweets({
     track: state.filter,
-    result_type: 'recent',
-    count: 12
+    result_type: state.result_type,
+    count: state.count
   });
 
   // element callbacks
@@ -124,8 +143,8 @@ $(document).ready(function() {
     clearVideos();
     fetchTweets({
       track: state.filter,
-      result_type: 'recent',
-      count: 12,
+      result_type: state.result_type,
+      count: state.count,
       max_id: state.max_id
     });
     return false;
@@ -137,8 +156,8 @@ $(document).ready(function() {
     state.max_id = 0;
     fetchTweets({
       track: state.filter,
-      result_type: 'recent',
-      count: 12
+      result_type: state.result_type,
+      count: state.count
     });
     return false;
   })

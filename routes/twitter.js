@@ -10,7 +10,11 @@ exports.getTweet = function(res, count) {
   return function(err, reply) {
     if (err) {
       console.log(err);
+      res.json('500', err);
       return;
+    }
+    if (reply.statuses.length == 0) {
+      res.json('404', {message: 'No videos found with that query.'});
     }
     var results = [];
 
@@ -56,6 +60,6 @@ exports.getTweet = function(res, count) {
       if (results.length == reply.statuses.length) {
         res.json(results);
       }
-    } 
+    }
   }.bind( {res: res, count: count} )
 }
