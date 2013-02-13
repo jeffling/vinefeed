@@ -24,11 +24,13 @@ exports.getTweet = function(res, count) {
       t.text = tweet.text;
       t.vine_url = vine_url;
       t.vid_url = '';
+      t.thumb_url = '';
       request( vine_url, function(error, response, body) {
         var pattern = /https\:\/\/vines\.s3\.amazonaws.com\/videos\/.*?\.mp4/;
         var match = pattern.exec(body);
         if(match != null && !error && response.statusCode == 200) {
           this.t.vid_url = match[0];
+          this.t.thumb_url = match[0].replace('videos', 'thumbs') + '.jpg';
           aggregate(this.t);
         }
         // note and and keep track of failure 
