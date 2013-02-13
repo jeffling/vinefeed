@@ -53,7 +53,7 @@ exports.getTweet = function(res, count) {
     // I can see why Node.JS isn't for everything
     function aggregate(t) {
       results.push(t);
-      if (results.length == count) {
+      if (results.length == reply.statuses.length) {
         res.json(results);
       }
     } 

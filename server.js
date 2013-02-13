@@ -34,6 +34,8 @@ app.configure('development', function() {
 //   var db = mongoose.connect('localhost', 'flowtododb');
 //   app.use(express.errorHandler());
 // });
+
+
 // routes
 var routes = {};
 routes.common = require('./routes/common');
