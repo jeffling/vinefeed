@@ -4,15 +4,14 @@ block content
   .row
     .span12
       script(src='/js/client.js')
-      .hero-unit
-        img(src='/img/vine_icon.png', style="width:8%")
-        h1.white_head(style="font-size:35pt")= 'inefeed'
-        p Welcome to #{title}
-        form.form-search#searchForm
-          div.input-append
-            input#searchBar(type="text", class="span2 search-query")
-            button#searchBtn(type="submit", class="btn")="Search"
-            button#moreBtn(type="submit", class="btn", )="More"
+      .navbar.navbar-fixed-top
+        .navbar-inner
+          a.brand(href='#')
+            img(src='/img/vine_icon.png', style="width:20px")
+            |inefeed
+          form.navbar-search.pull-left#searchForm
+            input.search-query#searchBar(type="text")
+          button.btn.pull-right#moreBtn(type="submit")="More"
   .row.span12#videos
 
   .row

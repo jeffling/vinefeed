@@ -80,3 +80,12 @@ div.ttip {
 	left:-50px;
 	width:288px;
 }
+
+.navbar-inner {
+	margin-left:5px;
+	margin-right:5px;
+}
+
+#moreBtn {
+	width:100px;
+}

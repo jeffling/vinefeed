@@ -69,7 +69,7 @@ function presentTweet(data) {
     $("#" + data.id).hide();
   });
   // when video is loaded (or at the very least the thumbnail)
-  _V_(data.id).addEvent("loadeddata", function() {
+  _V_(data.id).addEvent("loadedmetadata", function() {
     $("#" + data.id + "-poster").remove();
     $("#" + data.id).show();
     this.volume(0);
@@ -103,28 +103,6 @@ $(document).ready(function() {
   }
 
   // element callbacks
-  $('#searchBar').keydown(function() {
-    if ($('#moreBtn').is(":visible")) {
-      $('#moreBtn').hide();
-      $('#searchBtn').show();
-    }
-  });
-  $('#searchBtn').click(function() {
-    state.filter = $('#searchBar').val(); //TODO: Use identifiers
-    if(state.filter == '') {
-      state.filter = 'vine';
-    }
-    clearVideos();
-    state.max_id = 0;
-    fetchTweets({  
-      track: state.filter,
-      result_type: 'recent',
-      count: 12});
-    $(this).hide();
-    $('#moreBtn').show();
-    return false;
-  });
-
   $('#moreBtn').click(function() {
     clearVideos();
     fetchTweets({  
@@ -136,6 +114,16 @@ $(document).ready(function() {
   });
 
   $('#searchForm').submit(function() {
+    state.filter = $('#searchBar').val();
+    if(state.filter == '') {
+      state.filter = 'vine';
+    }
+    clearVideos();
+    state.max_id = 0;
+    fetchTweets({  
+      track: state.filter,
+      result_type: 'recent',
+      count: 12});
     return false;
   })
 });
