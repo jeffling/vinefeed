@@ -63,13 +63,12 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
 
 // clears the screen of current videos and preps for next video
 function clearVideos() {
-  var spinner;
-  for(var i = 0; i < 12; i++) {
+  $('.spinner').show();
+  $('.ttip').hide();
+  $('.vine_link').prop('href', '#');
+  for(var i = 0; i < state.count; i++) {
     $('#' + i + '-player').hide();
-    $('#' + i + '-spinner').show();
     $('#' + i + '-ttip').html();
-    $('.ttip').hide();
-    $('.vine_link').prop('href', '#');
   }
 }
 
@@ -83,8 +82,9 @@ function fetchTweets(query) {
     success: function(data) {
       for(var i = 0; i < data.length; i++)
       presentTweet(data[i], i);
-      for(; i < state.count; i++)
-      $('#' + i + '-spinner').hide();
+      for(; i < state.count; i++) {
+        $('#' + i + '-spinner').hide();
+      }
     },
     error: function(jqXHR) {
       console.log(jqXHR);
@@ -96,7 +96,7 @@ function fetchTweets(query) {
       $('.alert').alert();
       $('.spinner').hide();
     },
-    timeout: 5000
+    timeout: 10000
   });
 }
 

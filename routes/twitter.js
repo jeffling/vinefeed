@@ -43,15 +43,6 @@ exports.getTweet = function(res, count) {
         }
       }.bind({t:t}));
     }
-    // this error handling no longer works for the REST style API
-    // if ( failures > 0 ) {
-    //   twit.get('search/tweets', {
-    //     q: global.last_query.track + ' source:vine_for_ios exclude:retweets',
-    //     result_type: global.last_query.result_type,
-    //     count: failures,
-    //     max_id: global.last_twitter_id
-    //   }, getTweet(this.res));
-    // }
 
     // this function aggregates all the results and sends when the right amount of stuff is aggregated
     // I can see why Node.JS isn't for everything
