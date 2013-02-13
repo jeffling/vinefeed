@@ -14,7 +14,7 @@ exports.getTweet = function(res, count) {
       return;
     }
     if (reply.statuses.length == 0) {
-      res.json('404', {message: 'No videos found with that query.'});
+      res.json('404', 'No videos found with that query.');
     }
     var results = [];
 
