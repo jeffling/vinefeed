@@ -88,3 +88,13 @@ div.ttip {
 	width:200;
 	height:200;
 }
+
+.navbar-inner {
+	margin-left:5px;
+	margin-right:5px;
+}
+
+#moreBtn {
+	width:100px;
+}
+
