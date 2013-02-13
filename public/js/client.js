@@ -29,6 +29,7 @@ function presentTweet(data) {
   if (state.max_id == 0 || state.max_id > data.id)
     state.max_id = data.id;
 
+  //create a row for every 4 videos
   if(Math.floor(state.i % 4) == 0) {
     $("<div id='row" + Math.floor(state.i / 4) + "' class='row show-grid'>").appendTo("#videos");
     if(state.i > 3) {
@@ -40,11 +41,17 @@ function presentTweet(data) {
       });
     }
   }
-  var new_video = $("<video id='" + data.id + "' class='video-js vjs-default-skin bigger magnify' loop preload='metadata' width='200' height='200' src='" + data.vid_url + "'></video>");
+
+  /* Setup video and place in row.
+     1. Set video
+     2. Set tooltip
+     3. Set link to twitter url
+     4. Set poster
+   */
+  var new_video = $("<video id='" + data.id + "' class='video-js vjs-default-skin bigger magnify' loop preload='metadata' width='200' height='200' poster='" + data.thumb_url + "' src='" + data.vid_url + "'></video>");
   var tooltip = $("<div class='ttip'>@" + data.user + ': ' + data.text + "</div>")
   $("<div id='" + data.id + "-container' class='span3 item'>").append(new_video).append(tooltip).appendTo("#row" + Math.floor(state.i / 4));
   state.i++;
-  // wrap the vine feed thing with an link
   var vine_link = $("<a>", {
     href: "https://twitter.com/" + data.user + "/status/" + data.id
   });
@@ -53,14 +60,14 @@ function presentTweet(data) {
   // need to be done when player is ready to account for video.js preprocessing
   _V_(data.id).addEvent("loadstart", function() {
     // hide the parent initially until loaded. 
-    $("#" + data.id).hide();
+    //$("#" + data.id).hide();
     // load spinner
-    $("#" + data.id).parent().spin();
+    //$("#" + data.id).parent().spin();
   });
   // when video is loaded (or at the very least the thumbnail)
   _V_(data.id).addEvent("loadeddata", function() {
-    $("#" + data.id).parent().spin(false);
-    $("#" + data.id).fadeIn("slow").show();
+    //$("#" + data.id).parent().spin(false);
+    //$("#" + data.id).fadeIn("slow");
     this.volume(0);
   });
   // mouseover in, mouseover out callbacks
