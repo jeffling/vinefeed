@@ -40,6 +40,7 @@ a {
 	margin-top: 10px;
 	margin-bottom: 20px;
 	height: 200px;
+	width:200px
 }
 
 .bigger {
@@ -92,4 +93,6 @@ div.ttip {
 
 .spinner {
 	margin:84px;
+	z-index:3;
+	position:absolute;
 }
