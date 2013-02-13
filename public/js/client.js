@@ -10,6 +10,11 @@ var state = {
   max_id: '0'
 };
 
+// if firefox, default to flash
+if(navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
+  VideoJS.options.techOrder=  ["flash", "html5"];
+}
+
 function clearVideos() {
     $(".spinner").remove();
     $("#videos").empty();
@@ -18,9 +23,9 @@ function clearVideos() {
 
 function fetchTweets(query) {
   $.getJSON('api/tweets', query, function (data) {
-        for (var x = 0; x < data.length; x++ )
-          presentTweet(data[x]);
-      } );
+    for (var x = 0; x < data.length; x++ )
+      presentTweet(data[x]);
+  } );
 }
 
 
@@ -48,9 +53,10 @@ function presentTweet(data) {
      3. Set link to twitter url
      4. Set poster
    */
-  var new_video = $("<video id='" + data.id + "' class='video-js vjs-default-skin bigger magnify' loop preload='metadata' width='200' height='200' poster='" + data.thumb_url + "' src='" + data.vid_url + "'></video>");
+  var new_video = $("<video id='" + data.id + "' class='video-js vjs-default-skin bigger magnify' loop preload='metadata' width='200' height='200' src='" + data.vid_url + "'></video>");
+  var poster = $("<img id='" + data.id + "-poster' class='poster' src=' " + data.thumb_url +  "'></img>");
   var tooltip = $("<div class='ttip'>@" + data.user + ': ' + data.text + "</div>")
-  $("<div id='" + data.id + "-container' class='span3 item'>").append(new_video).append(tooltip).appendTo("#row" + Math.floor(state.i / 4));
+  $("<div id='" + data.id + "-container' class='span3 item'>").append(new_video).append(poster).append(tooltip).appendTo("#row" + Math.floor(state.i / 4));
   state.i++;
   var vine_link = $("<a>", {
     href: "https://twitter.com/" + data.user + "/status/" + data.id
@@ -60,14 +66,12 @@ function presentTweet(data) {
   // need to be done when player is ready to account for video.js preprocessing
   _V_(data.id).addEvent("loadstart", function() {
     // hide the parent initially until loaded. 
-    //$("#" + data.id).hide();
-    // load spinner
-    //$("#" + data.id).parent().spin();
+    $("#" + data.id).hide();
   });
   // when video is loaded (or at the very least the thumbnail)
   _V_(data.id).addEvent("loadeddata", function() {
-    //$("#" + data.id).parent().spin(false);
-    //$("#" + data.id).fadeIn("slow");
+    $("#" + data.id + "-poster").remove();
+    $("#" + data.id).show();
     this.volume(0);
   });
   // mouseover in, mouseover out callbacks
@@ -85,12 +89,6 @@ function presentTweet(data) {
 }
 
 
-// if firefox, default to flash
-if(navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
-  VideoJS.options = {
-    techOrder: ["flash", "html5"]
-  };
-}
 
 
 $(document).ready(function() {

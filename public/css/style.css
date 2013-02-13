@@ -81,4 +81,10 @@ div.ttip {
 	top:50px;
 	left:-50px;
 	width:288px;
-};
+}
+
+.poster {
+	z-index:0;
+	width:200;
+	height:200;
+}
