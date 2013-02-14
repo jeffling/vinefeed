@@ -35,6 +35,7 @@ function playersInit(data) {
       }));
       // when video is loaded (or at the very least the thumbnail)
       _V_(i + '-player').addEvent("loadedmetadata", function() {
+        console.log('loaded metadata');
         $('#' + this + '-spinner').hide();
         $('#' + this + '-player').show();
         $('#' + this + '-ttip').show();
@@ -107,6 +108,9 @@ function presentTweet(data, i) {
   // set max_id to avoid duplicate videos
   if(state.max_id == 0 || state.max_id > data.id) state.max_id = data.id - 1;
   _V_(i + '-player').src(data.vid_url);
+  _V_(i + '-player').play();
+  _V_(i + '-player').pause();
+
   $('#' + i + '-ttip').html('<strong>@' + data.user + '</strong> - ' + data.text);
   $('#' + i + '-link').prop('href', "https://twitter.com/" + data.user + "/status/" + data.id);
 }
