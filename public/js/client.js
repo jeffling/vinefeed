@@ -17,7 +17,7 @@ function playersInit(data) {
   var player, ttip, spinner, vine_link;
   for(var row = 0; row < 3; row++) {
     for(var item = 0; item < 4; item++) {
-      player = $("<video id='" + i + "-player' class='video-js vjs-default-skin bigger magnify' loop preload='metadata' width='200' height='200'></video>");
+      player = $("<video id='" + i + "-player' class='video-js vjs-default-skin bigger magnify' loop preload='auto' width='200' height='200'></video>");
       ttip = $('<div>', {
         id: i + '-ttip',
         'class': 'ttip'
@@ -68,7 +68,8 @@ function clearVideos() {
   $('.ttip').hide();
   $('.vine_link').prop('href', '#');
   for(var i = 0; i < state.count; i++) {
-    $('#' + i + '-player').hide();
+    if (! (navigator.userAgent.toLowerCase().indexOf('firefox') != -1))
+      $('#' + i + '-player').hide();
     $('#' + i + '-ttip').html();
   }
 }
@@ -108,9 +109,6 @@ function presentTweet(data, i) {
   // set max_id to avoid duplicate videos
   if(state.max_id == 0 || state.max_id > data.id) state.max_id = data.id - 1;
   _V_(i + '-player').src(data.vid_url);
-  _V_(i + '-player').play();
-  _V_(i + '-player').pause();
-
   $('#' + i + '-ttip').html('<strong>@' + data.user + '</strong> - ' + data.text);
   $('#' + i + '-link').prop('href', "https://twitter.com/" + data.user + "/status/" + data.id);
 }
