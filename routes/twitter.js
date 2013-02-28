@@ -1,12 +1,8 @@
 var request = require('request')
-, config = require('../config')
-, Twit = require('twit')
-, async = require('async');
-
-var twit = new Twit(config.twitConfig);
+, config = require('../config');
 
 // return a bound function with socket
-exports.getTweet = function(res, count) {
+exports.getTweet = function(res) {
   return function(err, reply) {
     if (err) {
       console.log(err);
@@ -15,8 +11,10 @@ exports.getTweet = function(res, count) {
     }
     if (reply.statuses.length == 0) {
       res.json('404', 'No videos found with that query.');
+      return;
     }
     var results = [];
+    var count = reply.statuses.length;
 
     for(var i = 0; i < reply.statuses.length; i++) {
       var tweet = reply.statuses[i];
@@ -30,6 +28,11 @@ exports.getTweet = function(res, count) {
       t.vid_url = '';
       t.thumb_url = '';
       request( vine_url, function(error, response, body) {
+        if (error) {
+          console.log(error);
+          count--;
+          return;
+        }
         var pattern = /https\:\/\/vines\.s3\.amazonaws.com\/videos\/.*?\.mp4/;
         var match = pattern.exec(body);
         if(match != null && !error && response.statusCode == 200) {
@@ -40,6 +43,8 @@ exports.getTweet = function(res, count) {
         // note and and keep track of failure 
         else {
           console.log('\nfailed to load tweet : ' + this.text + '\n');
+          count--;
+          return;
         }
       }.bind({t:t}));
     }
@@ -48,9 +53,9 @@ exports.getTweet = function(res, count) {
     // I can see why Node.JS isn't for everything
     function aggregate(t) {
       results.push(t);
-      if (results.length == reply.statuses.length) {
+      if (results.length == count) {
         res.json(results);
       }
     }
-  }.bind( {res: res, count: count} )
+  }
 }
