@@ -1,5 +1,4 @@
-var request = require('request')
-, config = require('../config');
+var request = require('request');
 
 // return a bound function with socket
 exports.getTweet = function(res) {
