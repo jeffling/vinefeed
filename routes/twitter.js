@@ -19,15 +19,17 @@ exports.getTweet = function(res) {
     for(var i = 0; i < reply.statuses.length; i++) {
       var tweet = reply.statuses[i];
       var t = {};
-      var vineUrlMatch = /https:\/\/t\.co\/[A-Za-z0-9]+/.exec(tweet.text);
+      var vineUrlMatch = /https?:\/\/t\.co\/[A-Za-z0-9]+/.exec(tweet.text);
       t.user = tweet.user.screen_name;
       t.id = tweet.id_str;
       t.text = tweet.text;
-      t.vineUrl = vineUrlMatch[0];
+      t.vineUrl = (vineUrlMatch) ? vineUrlMatch[0] : "err";
       t.vidUrl = '';
       t.thumbUrl = '';
+
       request( t.vineUrl, function(error, response, body) {
         if (error) {
+          console.log('\nfailed to load tweet : ' + this.t.text + '\n');
           console.log(error);
           count--;
           return;
