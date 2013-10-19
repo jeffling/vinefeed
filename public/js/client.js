@@ -100,7 +100,7 @@ function fetchTweets(query) {
       $('.alert').alert();
       $('.spinner').hide();
     },
-    timeout: 10000
+    timeout: 20000
   });
 }
 
