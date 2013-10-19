@@ -8,6 +8,7 @@ var express = require('express'),
 // mongoose = require('mongoose'),
 var app = express();
 // app.locals = require(' ./locals');
+
 app.configure(function() {
   app.set('port', process.env.PORT || 8080);
   app.set('views', __dirname + '/views');
