@@ -17,6 +17,8 @@ exports.getTweet = function(res) {
 
     for(var i = 0; i < reply.statuses.length; i++) {
       var tweet = reply.statuses[i];
+      console.log(tweet.text);
+
       var t = {};
       var text_splits = tweet.text.split(/\s/);
       var vine_url = text_splits[text_splits.length - 1];
@@ -32,18 +34,17 @@ exports.getTweet = function(res) {
           count--;
           return;
         }
-        var pattern = /https\:\/\/vines\.s3\.amazonaws.com\/videos\/.*?\.mp4/;
+        var pattern = /<meta.*?property="twitter:player:stream".*?content="(.*?)"/;
         var match = pattern.exec(body);
         if(match != null && !error && response.statusCode == 200) {
-          this.t.vid_url = match[0];
-          this.t.thumb_url = match[0].replace('videos', 'thumbs') + '.jpg';
+          this.t.vid_url = match[1];
+          this.t.thumb_url = match[1].replace('videos', 'thumbs') + '.jpg';
           aggregate(this.t);
         }
         // note and and keep track of failure 
         else {
-          console.log('\nfailed to load tweet : ' + this.text + '\n');
+          console.log('\nfailed to load tweet : ' + this.t.text + '\n');
           count--;
-          return;
         }
       }.bind({t:t}));
     }
@@ -57,4 +58,4 @@ exports.getTweet = function(res) {
       }
     }
   }
-}
+};

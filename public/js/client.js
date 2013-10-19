@@ -1,7 +1,7 @@
 // Application state variables
 var state = {
   // initial filter - all tweets will have vine in the title. hopefully. 
-  filter: 'vine',
+  filter: '',
   // max_id for keeping track of which video is what
   max_id: '0',
   // how many tweets we want
@@ -12,7 +12,7 @@ var state = {
 
 
 // Initializes the players and other elements
-function playersInit(data) {
+function playersInit() {
   var i = 0;
   var player, ttip, spinner, vine_link;
   for(var row = 0; row < 3; row++) {
@@ -27,12 +27,13 @@ function playersInit(data) {
         'class': 'spinner',
         src: 'img/ajax-loader.gif'
       });
-      $('#item-' + i).append(spinner).append(player).append(ttip);
-      $('#item-' + i).wrap($("<a>", {
-        id: i + '-link',
-        'class': "vine_link",
-        href: "#"
-      }));
+        var videoItem = $('#item-' + i);
+        videoItem.append(spinner).append(player).append(ttip);
+        videoItem.wrap($("<a>", {
+          id: i + '-link',
+          'class': "vine_link",
+          href: "#"
+        }));
       // when video is loaded (or at the very least the thumbnail)
       _V_(i + '-player').addEvent("loadedmetadata", function() {
         console.log('loaded metadata');
@@ -76,6 +77,7 @@ function clearVideos() {
 
 
 // Fetches the tweets from the server given a twitter API query
+// TODO: use promises
 function fetchTweets(query) {
   $.ajax({
     dataType: 'json',
@@ -93,7 +95,7 @@ function fetchTweets(query) {
       var alert = $('<div>', {
         'class': 'alert',
         html: '<strong>' + jqXHR.statusText + '</strong> - ' + jqXHR.responseText + '<a class="close" data-dismiss="alert" href="#">&times;</a>'
-      })
+      });
       $('#videos').prepend(alert);
       $('.alert').alert();
       $('.spinner').hide();
@@ -116,11 +118,12 @@ function presentTweet(data, i) {
 
 // sets the window has
 function setHash() {
-  if($('#searchBar').val() == '') {
-    document.location.hash == ''
+  var searchBar = $('#searchBar');
+  if(searchBar.val() == '') {
+    document.location.hash == '';
     state.filter = 'vine';
   } else {
-    document.location.hash = $('#searchBar').val();
+    document.location.hash = searchBar.val();
     state.filter = document.location.hash.slice(1);
   }
 }

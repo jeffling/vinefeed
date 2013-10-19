@@ -32,7 +32,7 @@ app.configure('development', function() {
 
 // // database connection
 // app.configure('development', function() {
-//   var db = mongoose.connect('localhost', 'flowtododb');
+//   var db = mongoose.connect('localhost', 'mongodb');
 //   app.use(express.errorHandler());
 // });
 
