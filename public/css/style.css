@@ -100,7 +100,15 @@ div.ttip {
 }
 
 .spinner {
-	margin:84px;
+    margin: 0 auto;
 	z-index:3;
-	position:absolute;
+	position: absolute;
+    display: block;
+}
+
+/*
+so the default spinner is centred.
+ */
+.spinner-margin {
+    margin: 84px;
 }

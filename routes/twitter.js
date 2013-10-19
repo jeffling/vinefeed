@@ -1,6 +1,7 @@
 var request = require('request');
 
 // return a bound function with socket
+// TODO: This is literally the worse thing ever. I've created a monster. If I could punch past jeff in the face I would
 exports.getTweet = function(res) {
   return function(err, reply) {
     if (err) {
@@ -17,8 +18,6 @@ exports.getTweet = function(res) {
 
     for(var i = 0; i < reply.statuses.length; i++) {
       var tweet = reply.statuses[i];
-      console.log(tweet.text);
-
       var t = {};
       var text_splits = tweet.text.split(/\s/);
       var vine_url = text_splits[text_splits.length - 1];
@@ -34,11 +33,14 @@ exports.getTweet = function(res) {
           count--;
           return;
         }
-        var pattern = /<meta.*?property="twitter:player:stream".*?content="(.*?)"/;
-        var match = pattern.exec(body);
-        if(match != null && !error && response.statusCode == 200) {
-          this.t.vid_url = match[1];
-          this.t.thumb_url = match[1].replace('videos', 'thumbs') + '.jpg';
+        var videoPattern = /<meta.*?property="twitter:player:stream".*?content="(.*?)"/;
+        var videoUrlMatch = videoPattern.exec(body);
+
+        var thumbnailPattern = /<meta.*?property="og:image".*?content="(.*?)"/;
+        var thumbnailUrlMatch = thumbnailPattern.exec(body);
+        if(videoUrlMatch != null && !error && response.statusCode == 200) {
+          this.t.vid_url = videoUrlMatch[1];
+          this.t.thumb_url = thumbnailUrlMatch[1];
           aggregate(this.t);
         }
         // note and and keep track of failure 

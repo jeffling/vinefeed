@@ -1,10 +1,10 @@
 // Application state variables
 var state = {
-  // initial filter - all tweets will have vine in the title. hopefully. 
+  // initial filter
   filter: '',
   // max_id for keeping track of which video is what
   max_id: '0',
-  // how many tweets we want
+  // how many tweets we want. Maybe in the future we'll have some sort of variable layout
   count: 12,
   // result_type
   result_type: 'recent'
@@ -12,6 +12,7 @@ var state = {
 
 
 // Initializes the players and other elements
+// TODO: switch to flowplayer so bad computers won't die
 function playersInit() {
   var i = 0;
   var player, ttip, spinner, vine_link;
@@ -24,8 +25,9 @@ function playersInit() {
       });
       spinner = $('<img>', {
         id: i + '-spinner',
-        'class': 'spinner',
-        src: 'img/ajax-loader.gif'
+        'class': 'spinner spinner-margin',
+        src: 'img/ajax-loader.gif',
+        style: 'display: block;'
       });
         var videoItem = $('#item-' + i);
         videoItem.append(spinner).append(player).append(ttip);
@@ -65,7 +67,9 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
 
 // clears the screen of current videos and preps for next video
 function clearVideos() {
-  $('.spinner').show();
+  var spinner = $('.spinner');
+  spinner.prop("src", "img/ajax-loader.gif");
+  spinner.show();
   $('.ttip').hide();
   $('.vine_link').prop('href', '#');
   for(var i = 0; i < state.count; i++) {
@@ -85,7 +89,9 @@ function fetchTweets(query) {
     data: query,
     success: function(data) {
       for(var i = 0; i < data.length; i++)
-      presentTweet(data[i], i);
+        presentTweet(data[i], i);
+
+      // hide failed videos >.> What a shitty way to work around a terrible terrible backend
       for(; i < state.count; i++) {
         $('#' + i + '-spinner').hide();
       }
@@ -105,11 +111,15 @@ function fetchTweets(query) {
 }
 
 
-
 // Sets the players to the new tweets
 function presentTweet(data, i) {
   // set max_id to avoid duplicate videos
   if(state.max_id == 0 || state.max_id > data.id) state.max_id = data.id - 1;
+
+  // load thumbnail
+  $('#' + i + '-spinner').prop("src", data.thumb_url);
+
+  // load the video and accompanying information
   _V_(i + '-player').src(data.vid_url);
   $('#' + i + '-ttip').html('<strong>@' + data.user + '</strong> - ' + data.text);
   $('#' + i + '-link').prop('href', "https://twitter.com/" + data.user + "/status/" + data.id);
@@ -165,5 +175,16 @@ $(document).ready(function() {
       count: state.count
     });
     return false;
-  })
+  });
+
+  // center the spinner cause it's tiny
+  $( ".spinner" ).load(function() {
+    if ( $( this ).height() > 100) {
+      $( this ).removeClass( "spinner-margin" );
+    }
+
+    if ( $( this ).height() < 100) {
+      $( this ).addClass( "spinner-margin" );
+    }
+  });
 });
