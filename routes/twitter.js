@@ -19,28 +19,27 @@ exports.getTweet = function(res) {
     for(var i = 0; i < reply.statuses.length; i++) {
       var tweet = reply.statuses[i];
       var t = {};
-      var text_splits = tweet.text.split(/\s/);
-      var vine_url = text_splits[text_splits.length - 1];
+      var vineUrlMatch = /https:\/\/t\.co\/[A-Za-z0-9]+/.exec(tweet.text);
       t.user = tweet.user.screen_name;
       t.id = tweet.id_str;
       t.text = tweet.text;
-      t.vine_url = vine_url;
-      t.vid_url = '';
-      t.thumb_url = '';
-      request( vine_url, function(error, response, body) {
+      t.vineUrl = vineUrlMatch[0];
+      t.vidUrl = '';
+      t.thumbUrl = '';
+      request( t.vineUrl, function(error, response, body) {
         if (error) {
           console.log(error);
           count--;
           return;
         }
-        var videoPattern = /<meta.*?property="twitter:player:stream".*?content="(.*?)"/;
-        var videoUrlMatch = videoPattern.exec(body);
 
-        var thumbnailPattern = /<meta.*?property="og:image".*?content="(.*?)"/;
-        var thumbnailUrlMatch = thumbnailPattern.exec(body);
-        if(videoUrlMatch != null && !error && response.statusCode == 200) {
-          this.t.vid_url = videoUrlMatch[1];
-          this.t.thumb_url = thumbnailUrlMatch[1];
+        var videoMatch = /<meta.*?property="twitter:player:stream".*?content="(.*?)"/.exec(body);
+
+        var thumbnailMatch = /<meta.*?property="og:image".*?content="(.*?)"/.exec(body);
+
+        if(videoMatch && thumbnailMatch && response.statusCode == 200) {
+          this.t.vidUrl = videoMatch[1];
+          this.t.thumbUrl = thumbnailMatch[1];
           aggregate(this.t);
         }
         // note and and keep track of failure 

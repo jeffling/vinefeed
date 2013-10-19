@@ -117,10 +117,10 @@ function presentTweet(data, i) {
   if(state.max_id == 0 || state.max_id > data.id) state.max_id = data.id - 1;
 
   // load thumbnail
-  $('#' + i + '-spinner').prop("src", data.thumb_url);
+  $('#' + i + '-spinner').prop("src", data.thumbUrl);
 
   // load the video and accompanying information
-  _V_(i + '-player').src(data.vid_url);
+  _V_(i + '-player').src(data.vidUrl);
   $('#' + i + '-ttip').html('<strong>@' + data.user + '</strong> - ' + data.text);
   $('#' + i + '-link').prop('href', "https://twitter.com/" + data.user + "/status/" + data.id);
 }
@@ -130,7 +130,7 @@ function presentTweet(data, i) {
 function setHash() {
   var searchBar = $('#searchBar');
   if(searchBar.val() == '') {
-    document.location.hash == '';
+    document.location.hash = '';
     state.filter = 'vine';
   } else {
     document.location.hash = searchBar.val();
