@@ -16,7 +16,7 @@ exports.getTweet = function(res) {
     var results = [];
     var count = reply.statuses.length;
 
-    for(var i = 0; i < reply.statuses.length; i++) {
+    for (var i = 0; i < reply.statuses.length; i++) {
       var tweet = reply.statuses[i];
       var t = {};
       var vineUrlMatch = /https?:\/\/t\.co\/[A-Za-z0-9]+/.exec(tweet.text);
@@ -27,7 +27,7 @@ exports.getTweet = function(res) {
       t.vidUrl = '';
       t.thumbUrl = '';
 
-      request( t.vineUrl, function(error, response, body) {
+      request(t.vineUrl, function(error, response, body) {
         if (error) {
           console.log('\nfailed to load tweet : ' + this.t.text + '\n');
           console.log(error);
@@ -39,7 +39,7 @@ exports.getTweet = function(res) {
 
         var thumbnailMatch = /<meta.*?property="og:image".*?content="(.*?)"/.exec(body);
 
-        if(videoMatch && thumbnailMatch && response.statusCode == 200) {
+        if (videoMatch && thumbnailMatch && response.statusCode == 200) {
           this.t.vidUrl = videoMatch[1];
           this.t.thumbUrl = thumbnailMatch[1];
           aggregate(this.t);
